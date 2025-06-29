@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiamondRush.MonoGame", "src\DiamondRush.MonoGame\DiamondRush.MonoGame.csproj", "{26AB6A90-B699-4788-AD98-0C0962E88BEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiamondRush.MonoGame.Core", "src\DiamondRush.MonoGame.Core\DiamondRush.MonoGame.Core.csproj", "{9FB90AA9-8665-4C2E-B174-29196CF89D7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26AB6A90-B699-4788-AD98-0C0962E88BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26AB6A90-B699-4788-AD98-0C0962E88BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26AB6A90-B699-4788-AD98-0C0962E88BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26AB6A90-B699-4788-AD98-0C0962E88BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB90AA9-8665-4C2E-B174-29196CF89D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB90AA9-8665-4C2E-B174-29196CF89D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB90AA9-8665-4C2E-B174-29196CF89D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB90AA9-8665-4C2E-B174-29196CF89D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{26AB6A90-B699-4788-AD98-0C0962E88BEB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{9FB90AA9-8665-4C2E-B174-29196CF89D7D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EA9A762-9669-4B62-A22F-41DD64F4AB64}
+	EndGlobalSection
+EndGlobal
