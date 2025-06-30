@@ -1,0 +1,16 @@
+﻿using Microsoft.Xna.Framework;
+
+namespace DiamondRush.MonoGame.Play;
+
+internal static class Constants
+{
+    public const int GameBoardFieldSize = 64;
+
+    public readonly static Color GameBoardColor = new Color(Color.Black, 0.8f);
+
+    public readonly static Color GameBoardBorderColor = Color.SaddleBrown;
+
+    public readonly static Color GameBoardSpacingColor = new Color(66, 66, 66);
+
+    public const int GameBoardBorderWidth = 3;
+}
