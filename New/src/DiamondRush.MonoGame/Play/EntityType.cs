@@ -3,4 +3,5 @@
 internal enum EntityType
 {
     Background,
+    GameBoard,
 }

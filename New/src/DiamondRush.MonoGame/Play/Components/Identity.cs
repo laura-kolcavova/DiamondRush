@@ -1,6 +1,6 @@
 ﻿namespace DiamondRush.MonoGame.Play.Components;
 
-internal struct Identity
+internal sealed record Identity
 {
-    public required EntityType EntityType { get; set; }
+    public required EntityType EntityType { get; init; }
 }

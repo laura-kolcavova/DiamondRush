@@ -1,9 +1,11 @@
-﻿using DiamondRush.MonoGame.Core.Textures;
+﻿using DiamondRush.MonoGame.Core;
+using DiamondRush.MonoGame.Core.Textures;
 using DiamondRush.MonoGame.Play.Components;
 using DiamondRush.MonoGame.Play.Content.Abstractions;
 using LightECS;
 using LightECS.Abstractions;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DiamondRush.MonoGame.Play.Factories;
 
@@ -11,13 +13,18 @@ internal sealed class BackgroundEntityFactory
 {
     private readonly IPlaySceneContentProvider _playSceneContentProvider;
 
+    private readonly GraphicsDevice _graphicsDevice;
+
     public BackgroundEntityFactory(
-        IPlaySceneContentProvider playSceneContentProvider)
+        IPlaySceneContentProvider playSceneContentProvider,
+        GraphicsDevice graphicsDevice)
     {
         _playSceneContentProvider = playSceneContentProvider;
+        _graphicsDevice = graphicsDevice;
     }
 
-    public Entity Create(IEntityContext entityContext)
+    public Entity Create(
+        IEntityContext entityContext)
     {
         var entity = entityContext.CreateEntity();
 
@@ -26,28 +33,23 @@ internal sealed class BackgroundEntityFactory
             EntityType = EntityType.Background,
         };
 
-        var backgroundTexture = _playSceneContentProvider.BackgroundTexture;
-
-        var textureRegion = new TextureRegion
-        {
-            Texture = backgroundTexture,
-            SourceBounds = new Rectangle(
-                0,
-                0,
-                backgroundTexture.Width,
-                backgroundTexture.Height)
-        };
-
         var sprite = new Sprite
         {
-            TextureRegion = textureRegion,
+            TextureRegion = new TextureRegion(
+                _playSceneContentProvider.BackgroundTexture)
         };
 
-        var position = Vector2.Zero;
+        var rectTransform = new RectTransform
+        {
+            Position = Vector2.Zero,
+            Width = _graphicsDevice.Viewport.Width,
+            Height = _graphicsDevice.Viewport.Height
+        };
+
 
         entityContext.Set(entity, identity);
         entityContext.Set(entity, sprite);
-        entityContext.Set(entity, position);
+        entityContext.Set(entity, rectTransform);
 
         return entity;
     }

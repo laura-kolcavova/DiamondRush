@@ -24,9 +24,11 @@ internal sealed class PlayScene : Scene
 
     private readonly EntityContext _entityContext;
 
+    private readonly SystemManager _systemManager;
+
     private readonly BackgroundEntityFactory _backgroundEntityFactory;
 
-    private readonly SystemManager _systemManager;
+    private readonly GameBoardEntityFactory _gameBoardEntityFactory;
 
     public PlayScene(
         IServiceProvider serviceProvider)
@@ -40,22 +42,27 @@ internal sealed class PlayScene : Scene
             AssetNames.RootDirectory);
 
         _playSceneContent = new PlaySceneContent(
-            _contentManager);
+            _contentManager,
+            _graphicsDevice);
 
         _entityContext = new EntityContext();
 
-        _backgroundEntityFactory = new BackgroundEntityFactory(
-            _playSceneContent);
-
         _systemManager = new SystemManager();
+
+        _backgroundEntityFactory = new BackgroundEntityFactory(
+            _playSceneContent,
+            _graphicsDevice);
+
+        _gameBoardEntityFactory = new GameBoardEntityFactory(
+            _playSceneContent,
+            _graphicsDevice);
     }
 
     protected override void Initialize()
     {
         _systemManager.AddSystem(new RenderSystem(
             _entityContext,
-            _spriteBatch,
-            _graphicsDevice));
+            _spriteBatch));
 
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
@@ -64,6 +71,7 @@ internal sealed class PlayScene : Scene
         base.Initialize();
 
         _backgroundEntityFactory.Create(_entityContext);
+        _gameBoardEntityFactory.Create(_entityContext, 10, 10);
     }
 
     protected override void LoadContent()
@@ -85,7 +93,6 @@ internal sealed class PlayScene : Scene
         base.OnDisposing();
 
         _contentManager.Dispose();
-
     }
 
     protected override void OnDisposed()

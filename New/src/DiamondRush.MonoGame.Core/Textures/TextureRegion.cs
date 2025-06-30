@@ -3,9 +3,27 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DiamondRush.MonoGame.Core.Textures;
 
-public struct TextureRegion
+public sealed record TextureRegion
 {
-    public required Texture2D Texture { get; set; }
+    public Texture2D Texture { get; }
 
-    public required Rectangle SourceBounds { get; set; }
+    public Rectangle SourceBounds { get; }
+
+    public TextureRegion(Texture2D texture2D)
+    {
+        Texture = texture2D;
+        SourceBounds = new Rectangle(
+            0,
+            0,
+            texture2D.Width,
+            texture2D.Height);
+    }
+
+    public TextureRegion(
+        Texture2D texture2D,
+        Rectangle sourceBounds)
+    {
+        Texture = texture2D;
+        SourceBounds = sourceBounds;
+    }
 }
