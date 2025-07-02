@@ -12,5 +12,11 @@ internal static class Constants
 
     public readonly static Color GameBoardSpacingColor = new Color(66, 66, 66);
 
+    public const int GameBoardSpacingWidth = 1;
+
     public const int GameBoardBorderWidth = 3;
+
+    public const int GemWidth = 64;
+
+    public const int GemHeight = 64;
 }

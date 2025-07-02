@@ -64,8 +64,11 @@ internal sealed class GameBoardEntityFactory
             }
         };
 
-        var width = rows * Constants.GameBoardFieldSize;
-        var height = columns * Constants.GameBoardFieldSize;
+        var spacingWidthSum = (columns - 1) * Constants.GameBoardSpacingWidth;
+        var spacingHeightSum = (rows - 1) * Constants.GameBoardSpacingWidth;
+
+        var width = columns * Constants.GameBoardFieldSize + spacingWidthSum;
+        var height = rows * Constants.GameBoardFieldSize + spacingHeightSum;
 
         var rectTransform = new RectTransform
         {

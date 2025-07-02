@@ -64,6 +64,10 @@ internal sealed class PlayScene : Scene
             _entityContext,
             _spriteBatch));
 
+        _systemManager.AddSystem(new GemSpawnSystem(
+            _entityContext,
+            _playSceneContent));
+
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
             _playSceneContent));
@@ -93,6 +97,8 @@ internal sealed class PlayScene : Scene
         base.OnDisposing();
 
         _contentManager.Dispose();
+
+        _playSceneContent.Dispose();
     }
 
     protected override void OnDisposed()

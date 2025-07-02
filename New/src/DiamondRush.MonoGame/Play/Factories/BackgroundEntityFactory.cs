@@ -46,7 +46,6 @@ internal sealed class BackgroundEntityFactory
             Height = _graphicsDevice.Viewport.Height
         };
 
-
         entityContext.Set(entity, identity);
         entityContext.Set(entity, sprite);
         entityContext.Set(entity, rectTransform);

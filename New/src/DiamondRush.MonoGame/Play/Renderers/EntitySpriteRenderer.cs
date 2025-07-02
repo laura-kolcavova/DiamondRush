@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DiamondRush.MonoGame.Play.Renderers;
 
-internal sealed class BackgroundEntityRenderer
+internal sealed class EntitySpriteRenderer
 {
     private readonly IEntityContext _entityContext;
 
@@ -17,7 +17,7 @@ internal sealed class BackgroundEntityRenderer
 
     private readonly IComponentStore<RectTransform> _rectTransformStore;
 
-    public BackgroundEntityRenderer(
+    public EntitySpriteRenderer(
         IEntityContext entityContext,
         SpriteBatch spriteBatch)
     {
