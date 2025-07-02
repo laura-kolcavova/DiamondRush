@@ -16,11 +16,13 @@ internal sealed class PlaySceneContent :
 
     private bool _isDisposed;
 
+    private Texture2D? _blankTexture;
+
     private Texture2D? _backgroundTexture;
 
-    private SpriteFont? _defaultFont;
+    private Texture2D? _gemsTexture;
 
-    private Texture2D? _pixel;
+    private SpriteFont? _defaultFont;
 
     public PlaySceneContent(
         ContentManager contentManager,
@@ -41,32 +43,38 @@ internal sealed class PlaySceneContent :
         GC.SuppressFinalize(this);
     }
 
+    public Texture2D BlankTexture =>
+        _blankTexture
+        ??= LoadBlankTexture();
+
     public Texture2D BackgroundTexture =>
         _backgroundTexture
-        ??= _contentManager.Load<Texture2D>(AssetNames.Textures.Background);
+        ??= _contentManager.Load<Texture2D>(AssetNames.Images.Background);
+
+    public Texture2D GemsTexture =>
+        _gemsTexture
+        ??= _contentManager.Load<Texture2D>(AssetNames.SpriteSheets.Gems);
 
     public SpriteFont DefaultFont =>
         _defaultFont
         ??= _contentManager.Load<SpriteFont>(AssetNames.Fonts.DefaultFont);
 
-    public Texture2D BlankTexture =>
-        _pixel
-        ??= LoadBlankTexture();
-
     public void LoadContent()
     {
-        _backgroundTexture = _contentManager.Load<Texture2D>(AssetNames.Textures.Background);
+        _blankTexture = LoadBlankTexture();
+
+        _backgroundTexture = _contentManager.Load<Texture2D>(AssetNames.Images.Background);
+
+        _gemsTexture = _contentManager.Load<Texture2D>(AssetNames.SpriteSheets.Gems);
 
         _defaultFont = _contentManager.Load<SpriteFont>(AssetNames.Fonts.DefaultFont);
-
-        _pixel = LoadBlankTexture();
     }
 
     private Texture2D LoadBlankTexture()
     {
         var texture = new Texture2D(_graphicsDevice, 1, 1);
 
-        texture.SetData(new[] { Color.White });
+        texture.SetData([Color.White]);
 
         return texture;
     }
@@ -82,7 +90,13 @@ internal sealed class PlaySceneContent :
         {
         }
 
+        _blankTexture = null;
+
         _backgroundTexture = null;
+
+        _gemsTexture = null;
+
+        _defaultFont = null;
 
         _isDisposed = true;
     }

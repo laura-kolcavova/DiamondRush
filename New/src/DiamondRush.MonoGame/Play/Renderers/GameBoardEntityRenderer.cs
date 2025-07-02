@@ -66,12 +66,15 @@ internal sealed class GameBoardEntityRenderer
     {
         foreach (var rowIndex in Enumerable.Range(1, gameBoard.Rows - 1))
         {
+            var rowPositionY = rowIndex * Constants.GameBoardFieldSize
+                + 1
+                + (rowIndex - 1) * Constants.GameBoardSpacingWidth;
 
             var rowDestinationRectangle = new Rectangle(
                 (int)rectTransform.Position.X,
-                (int)rectTransform.Position.Y + rowIndex * Constants.GameBoardFieldSize,
+                (int)rectTransform.Position.Y + rowPositionY,
                 (int)rectTransform.Width,
-                1);
+                Constants.GameBoardSpacingWidth);
 
             _spriteBatch.DrawSprite(
                 gameBoardStyles.SpacingSprite,
@@ -80,15 +83,19 @@ internal sealed class GameBoardEntityRenderer
 
         foreach (var colIndex in Enumerable.Range(1, gameBoard.Columns - 1))
         {
-            var rowDestinationRectangle = new Rectangle(
-                (int)rectTransform.Position.X + colIndex * Constants.GameBoardFieldSize,
+            var colPositionX = colIndex * Constants.GameBoardFieldSize
+                + 1
+                + (colIndex - 1) * Constants.GameBoardSpacingWidth;
+
+            var colDestinationRectangle = new Rectangle(
+                (int)rectTransform.Position.X + colPositionX,
                 (int)rectTransform.Position.Y,
-                1,
+                Constants.GameBoardSpacingWidth,
                 (int)rectTransform.Height);
 
             _spriteBatch.DrawSprite(
                 gameBoardStyles.SpacingSprite,
-                rowDestinationRectangle);
+                colDestinationRectangle);
         }
     }
 
@@ -107,10 +114,10 @@ internal sealed class GameBoardEntityRenderer
             leftBorderDestinationRectangle);
 
         var topBorderDestinationRectangle = new Rectangle(
-           (int)rectTransform.Position.X,
-           (int)rectTransform.Position.Y - Constants.GameBoardBorderWidth,
-           (int)rectTransform.Width + Constants.GameBoardBorderWidth,
-           Constants.GameBoardBorderWidth);
+            (int)rectTransform.Position.X,
+            (int)rectTransform.Position.Y - Constants.GameBoardBorderWidth,
+            (int)rectTransform.Width + Constants.GameBoardBorderWidth,
+            Constants.GameBoardBorderWidth);
 
         _spriteBatch.DrawSprite(
             gameBoardStyles.BorderSprite,
@@ -127,10 +134,10 @@ internal sealed class GameBoardEntityRenderer
             rightBorderDestinationRectangle);
 
         var bottomBorderDestinationRectangle = new Rectangle(
-          (int)rectTransform.Position.X - Constants.GameBoardBorderWidth,
-          (int)(rectTransform.Position.Y + rectTransform.Height),
-          (int)rectTransform.Width + Constants.GameBoardBorderWidth,
-          Constants.GameBoardBorderWidth);
+            (int)rectTransform.Position.X - Constants.GameBoardBorderWidth,
+            (int)(rectTransform.Position.Y + rectTransform.Height),
+            (int)rectTransform.Width + Constants.GameBoardBorderWidth,
+            Constants.GameBoardBorderWidth);
 
         _spriteBatch.DrawSprite(
             gameBoardStyles.BorderSprite,

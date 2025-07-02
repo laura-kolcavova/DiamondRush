@@ -14,7 +14,7 @@ internal sealed class RenderSystem :
 
     private readonly IComponentStore<Identity> _identityStore;
 
-    private readonly BackgroundEntityRenderer _backgroundRenderer;
+    private readonly EntitySpriteRenderer _entitySpriteRenderer;
 
     private readonly GameBoardEntityRenderer _gameBoardEntityRenderer;
 
@@ -29,7 +29,7 @@ internal sealed class RenderSystem :
 
         _identityStore = entityContext.UseStore<Identity>();
 
-        _backgroundRenderer = new BackgroundEntityRenderer(
+        _entitySpriteRenderer = new EntitySpriteRenderer(
             entityContext,
             spriteBatch);
 
@@ -46,11 +46,11 @@ internal sealed class RenderSystem :
 
             switch (identity.EntityType)
             {
-                case EntityType.Background:
-                    _backgroundRenderer.Render(entity);
-                    break;
                 case EntityType.GameBoard:
                     _gameBoardEntityRenderer.Render(entity);
+                    break;
+                default:
+                    _entitySpriteRenderer.Render(entity);
                     break;
             }
         }
