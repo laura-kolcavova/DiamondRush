@@ -18,7 +18,7 @@ internal sealed class GemEntityFactory
         IPlaySceneContentProvider playSceneContentProvider)
     {
         _textureAtlas = CreateGemTextureAtlas(
-            playSceneContentProvider.GemsTexture);
+            playSceneContentProvider.GemSpriteSheet);
     }
 
     public Entity Create(
