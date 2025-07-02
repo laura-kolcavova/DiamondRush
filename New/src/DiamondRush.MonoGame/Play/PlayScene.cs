@@ -1,6 +1,7 @@
 ﻿using DiamondRush.MonoGame.Core.Scenes;
 using DiamondRush.MonoGame.Core.Services;
 using DiamondRush.MonoGame.Core.Systems;
+using DiamondRush.MonoGame.Play.Components;
 using DiamondRush.MonoGame.Play.Content;
 using DiamondRush.MonoGame.Play.Factories;
 using DiamondRush.MonoGame.Play.Systems;
@@ -60,22 +61,34 @@ internal sealed class PlayScene : Scene
 
     protected override void Initialize()
     {
+        base.Initialize();
+
+        _backgroundEntityFactory.Create(_entityContext);
+
+        var gameBoardEntity = _gameBoardEntityFactory.Create(
+            _entityContext,
+            Constants.GameBoardRows,
+            Constants.GameBoardColumns);
+
+        var gameBoard = _entityContext.Get<GameBoard>(gameBoardEntity);
+
+        var playContext = PlayContext.CreateDefault(
+            gameBoardEntity,
+            gameBoard);
+
         _systemManager.AddSystem(new RenderSystem(
             _entityContext,
             _spriteBatch));
 
         _systemManager.AddSystem(new GemSpawnSystem(
             _entityContext,
-            _playSceneContent));
+            _playSceneContent,
+            playContext));
 
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
             _playSceneContent));
 
-        base.Initialize();
-
-        _backgroundEntityFactory.Create(_entityContext);
-        _gameBoardEntityFactory.Create(_entityContext, 10, 10);
     }
 
     protected override void LoadContent()

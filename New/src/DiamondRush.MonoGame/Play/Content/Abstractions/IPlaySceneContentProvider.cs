@@ -8,7 +8,7 @@ internal interface IPlaySceneContentProvider
 
     public Texture2D BackgroundTexture { get; }
 
-    public Texture2D GemsTexture { get; }
+    public Texture2D GemSpriteSheet { get; }
 
     public SpriteFont DefaultFont { get; }
 }

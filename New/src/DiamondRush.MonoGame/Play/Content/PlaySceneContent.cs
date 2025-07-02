@@ -20,7 +20,7 @@ internal sealed class PlaySceneContent :
 
     private Texture2D? _backgroundTexture;
 
-    private Texture2D? _gemsTexture;
+    private Texture2D? _gemSpriteSheet;
 
     private SpriteFont? _defaultFont;
 
@@ -51,8 +51,8 @@ internal sealed class PlaySceneContent :
         _backgroundTexture
         ??= _contentManager.Load<Texture2D>(AssetNames.Images.Background);
 
-    public Texture2D GemsTexture =>
-        _gemsTexture
+    public Texture2D GemSpriteSheet =>
+        _gemSpriteSheet
         ??= _contentManager.Load<Texture2D>(AssetNames.SpriteSheets.Gems);
 
     public SpriteFont DefaultFont =>
@@ -65,7 +65,7 @@ internal sealed class PlaySceneContent :
 
         _backgroundTexture = _contentManager.Load<Texture2D>(AssetNames.Images.Background);
 
-        _gemsTexture = _contentManager.Load<Texture2D>(AssetNames.SpriteSheets.Gems);
+        _gemSpriteSheet = _contentManager.Load<Texture2D>(AssetNames.SpriteSheets.Gems);
 
         _defaultFont = _contentManager.Load<SpriteFont>(AssetNames.Fonts.DefaultFont);
     }
@@ -94,7 +94,7 @@ internal sealed class PlaySceneContent :
 
         _backgroundTexture = null;
 
-        _gemsTexture = null;
+        _gemSpriteSheet = null;
 
         _defaultFont = null;
 

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DiamondRush.MonoGame.Play.Systems;
+
 internal sealed class DiagnosticSystem :
     IUpdateSystem,
     IDrawSystem
