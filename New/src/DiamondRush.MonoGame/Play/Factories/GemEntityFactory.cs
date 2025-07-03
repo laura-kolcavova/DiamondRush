@@ -66,24 +66,28 @@ internal sealed class GemEntityFactory
         var textureAtlas = new TextureAtlas(gemSpriteSheet);
 
         textureAtlas.SetTextureRegion(
-            nameof(GemType.Blue),
-            new Rectangle(0, 524, 502, 502));
-
-        textureAtlas.SetTextureRegion(
-            nameof(GemType.Green),
-            new Rectangle(1043, 524, 502, 502));
-
-        textureAtlas.SetTextureRegion(
             nameof(GemType.Orange),
             new Rectangle(0, 0, 502, 502));
+
+        textureAtlas.SetTextureRegion(
+            nameof(GemType.DarkBlue),
+            new Rectangle(523, 0, 502, 502));
+
+        textureAtlas.SetTextureRegion(
+            nameof(GemType.Red),
+            new Rectangle(1043, 0, 502, 502));
+
+        textureAtlas.SetTextureRegion(
+            nameof(GemType.Blue),
+            new Rectangle(0, 524, 502, 502));
 
         textureAtlas.SetTextureRegion(
             nameof(GemType.Purple),
             new Rectangle(523, 524, 502, 502));
 
         textureAtlas.SetTextureRegion(
-            nameof(GemType.Red),
-            new Rectangle(1043, 0, 502, 502));
+            nameof(GemType.Green),
+            new Rectangle(1043, 524, 502, 502));
 
         return textureAtlas;
     }

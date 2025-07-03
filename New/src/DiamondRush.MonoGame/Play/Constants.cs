@@ -4,9 +4,9 @@ namespace DiamondRush.MonoGame.Play;
 
 internal static class Constants
 {
-    public const int GameBoardRows = 10;
+    public const int GameBoardRows = 8;
 
-    public const int GameBoardColumns = 10;
+    public const int GameBoardColumns = 8;
 
     public const int GameBoardFieldSize = 64;
 

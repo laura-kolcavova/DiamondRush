@@ -4,6 +4,8 @@ internal enum GemType
 {
     Orange,
 
+    DarkBlue,
+
     Red,
 
     Blue,
