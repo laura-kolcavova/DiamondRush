@@ -95,17 +95,15 @@ internal sealed class GemSpawnSystem :
         var gameBoardRectTransform = _rectTransformStore.Get(
             _playContext.GameBoardEntity);
 
-        var positionX = gameBoardRectTransform.Position.X
-            + (gameBoardField.ColumnIndex * Constants.GemWidth)
-            + (gameBoardField.ColumnIndex - 1) * Constants.GameBoardSpacingWidth;
+        var gameBoardFieldPositionX = gameBoardField.ColumnIndex
+            * (Constants.GameBoardFieldSize + Constants.GameBoardSpacingWidth);
 
-        var positionY = gameBoardRectTransform.Position.Y
-           + (gameBoardField.RowIndex * Constants.GemWidth)
-           + (gameBoardField.RowIndex - 1) * Constants.GameBoardSpacingWidth;
+        var gameBoardFieldPositionY = gameBoardField.RowIndex
+            * (Constants.GameBoardFieldSize + Constants.GameBoardSpacingWidth);
 
         return new Vector2(
-            positionX,
-            positionY);
+            gameBoardRectTransform.Position.X + gameBoardFieldPositionX,
+            gameBoardRectTransform.Position.Y + gameBoardFieldPositionY);
     }
 
     private static GemType GetRandomGemType()

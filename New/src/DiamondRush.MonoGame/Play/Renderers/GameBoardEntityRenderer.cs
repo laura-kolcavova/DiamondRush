@@ -67,7 +67,6 @@ internal sealed class GameBoardEntityRenderer
         foreach (var rowIndex in Enumerable.Range(1, gameBoard.Rows - 1))
         {
             var rowPositionY = rowIndex * Constants.GameBoardFieldSize
-                + 1
                 + (rowIndex - 1) * Constants.GameBoardSpacingWidth;
 
             var rowDestinationRectangle = new Rectangle(
@@ -84,7 +83,6 @@ internal sealed class GameBoardEntityRenderer
         foreach (var colIndex in Enumerable.Range(1, gameBoard.Columns - 1))
         {
             var colPositionX = colIndex * Constants.GameBoardFieldSize
-                + 1
                 + (colIndex - 1) * Constants.GameBoardSpacingWidth;
 
             var colDestinationRectangle = new Rectangle(
