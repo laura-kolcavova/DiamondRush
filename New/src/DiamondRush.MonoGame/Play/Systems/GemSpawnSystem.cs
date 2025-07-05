@@ -43,30 +43,35 @@ internal sealed class GemSpawnSystem :
             return;
         }
 
-        TrySpawnNewGems();
-
-        _playContext.SetPlayState(PlayState.FallingGems);
+        if (TrySpawnNewGems())
+        {
+            _playContext.SetPlayState(PlayState.FallingGems);
+        }
+        else
+        {
+            _playContext.SetPlayState(PlayState.WaitingForInput);
+        }
     }
 
     private bool IsUpdateEnabled() =>
         _playContext.PlayState == PlayState.SpawningNewGems;
 
-    private void TrySpawnNewGems()
+    private bool TrySpawnNewGems()
     {
         var emptyGameBoardFields = FindEmptyGameBoardFields(
            _playContext.GameBoardFields);
 
         if (!emptyGameBoardFields.Any())
         {
-            _playContext.SetPlayState(PlayState.WaitingForInput);
-
-            return;
+            return false;
         }
 
         foreach (var gameBoardField in emptyGameBoardFields)
         {
             CreateGemForGameBoardField(gameBoardField);
         }
+
+        return true;
     }
 
     private IEnumerable<GameBoardField> FindEmptyGameBoardFields(

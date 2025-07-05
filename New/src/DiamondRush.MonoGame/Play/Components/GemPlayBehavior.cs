@@ -18,6 +18,10 @@ internal sealed record GemPlayBehavior
 
     public bool IsMatching { get; init; } = false;
 
+    public bool IsCollecting { get; init; } = false;
+
+    public bool IsCollected { get; init; } = false;
+
     public GemPlayBehavior(
         Entity gameBoardEntity)
     {
@@ -55,12 +59,28 @@ internal sealed record GemPlayBehavior
         };
     }
 
-    public GemPlayBehavior SetIsMatching(
-        bool isMatching)
+    public GemPlayBehavior MarkAsMatching()
     {
         return this with
         {
-            IsMatching = isMatching,
+            IsMatching = true,
+        };
+    }
+
+    public GemPlayBehavior StartCollecting()
+    {
+        return this with
+        {
+            IsCollecting = true,
+        };
+    }
+
+    public GemPlayBehavior FinishCollecting()
+    {
+        return this with
+        {
+            IsCollecting = false,
+            IsCollected = true,
         };
     }
 }
