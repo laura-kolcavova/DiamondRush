@@ -43,8 +43,18 @@ internal sealed class GemSpawnSystem :
             return;
         }
 
+        TrySpawnNewGems();
+
+        _playContext.SetPlayState(PlayState.FallingGems);
+    }
+
+    private bool IsUpdateEnabled() =>
+        _playContext.PlayState == PlayState.SpawningNewGems;
+
+    private void TrySpawnNewGems()
+    {
         var emptyGameBoardFields = FindEmptyGameBoardFields(
-            _playContext.GameBoardFields);
+           _playContext.GameBoardFields);
 
         if (!emptyGameBoardFields.Any())
         {
@@ -57,12 +67,7 @@ internal sealed class GemSpawnSystem :
         {
             CreateGemForGameBoardField(gameBoardField);
         }
-
-        _playContext.SetPlayState(PlayState.FallingGems);
     }
-
-    private bool IsUpdateEnabled() =>
-        _playContext.PlayState == PlayState.SpawningNewGems;
 
     private IEnumerable<GameBoardField> FindEmptyGameBoardFields(
         GameBoardFields gameBoardFields)
