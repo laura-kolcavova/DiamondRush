@@ -77,7 +77,7 @@ internal sealed class GemSpawnSystem :
         GameBoardField gameBoardField)
     {
         var gameBoardFieldPosition = GetGameBoardFieldPosition(
-          gameBoardField);
+            gameBoardField);
 
         var gameBoardRectTransform = _rectTransformStore.Get(
            _playContext.GameBoardEntity);
@@ -93,13 +93,16 @@ internal sealed class GemSpawnSystem :
             gemType,
             gemPosition);
 
-        var gemPlayBehavior = new GemPlayBehavior();
+        var gemPlayBehavior = new GemPlayBehavior(
+            _playContext.GameBoardEntity)
+            .StartFallingToGameBoardField(
+                gameBoardField,
+                gameBoardFieldPosition)
+            .SetVisibility(false);
 
         _gemPlayBehaviorStore.Set(
             gemEntity,
-            gemPlayBehavior.StartFallingToGameBoardField(
-                gameBoardField,
-                gameBoardFieldPosition));
+            gemPlayBehavior);
 
         return gemEntity;
     }
