@@ -15,21 +15,41 @@ internal sealed class GameBoardFields
         _fields = CreateFields(_gameBoard);
     }
 
+    public int Rows => _gameBoard.Rows;
+
+    public int Columns => _gameBoard.Columns;
+
     public GameBoardField GetField(
         int rowIndex,
         int columnIndex)
     {
-        if (rowIndex < 0 || rowIndex >= _gameBoard.Rows)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex), "Row index is out of bounds.");
-        }
+        AssertRowIndexInBounds(rowIndex);
 
-        if (columnIndex < 0 || columnIndex >= _gameBoard.Columns)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex), "Column index is out of bounds.");
-        }
+        AssertColumnIndexInBounds(columnIndex);
 
         return _fields[rowIndex, columnIndex];
+    }
+
+    public IEnumerable<GameBoardField> GetFieldsInRow(
+        int rowIndex)
+    {
+        AssertRowIndexInBounds(rowIndex);
+
+        for (var columnIndex = 0; columnIndex < _gameBoard.Columns; columnIndex++)
+        {
+            yield return _fields[rowIndex, columnIndex];
+        }
+    }
+
+    public IEnumerable<GameBoardField> GetFieldsInColumn(
+        int columnIndex)
+    {
+        AssertColumnIndexInBounds(columnIndex);
+
+        for (var rowIndex = 0; rowIndex < _gameBoard.Rows; rowIndex++)
+        {
+            yield return _fields[rowIndex, columnIndex];
+        }
     }
 
     public IEnumerable<GameBoardField> AsEnumerable()
@@ -40,6 +60,24 @@ internal sealed class GameBoardFields
             {
                 yield return _fields[row, column];
             }
+        }
+    }
+
+    private void AssertRowIndexInBounds(
+        int rowIndex)
+    {
+        if (rowIndex < 0 || rowIndex >= _gameBoard.Rows)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rowIndex), "Row index is out of bounds.");
+        }
+    }
+
+    private void AssertColumnIndexInBounds(
+        int columnIndex)
+    {
+        if (columnIndex < 0 || columnIndex >= _gameBoard.Columns)
+        {
+            throw new ArgumentOutOfRangeException(nameof(columnIndex), "Column index is out of bounds.");
         }
     }
 

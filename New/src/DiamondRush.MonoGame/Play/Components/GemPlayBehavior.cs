@@ -16,6 +16,8 @@ internal sealed record GemPlayBehavior
 
     public bool IsVisible { get; private set; } = true;
 
+    public bool IsMatching { get; init; } = false;
+
     public GemPlayBehavior(
         Entity gameBoardEntity)
     {
@@ -50,6 +52,15 @@ internal sealed record GemPlayBehavior
         return this with
         {
             IsVisible = isVisible,
+        };
+    }
+
+    public GemPlayBehavior SetIsMatching(
+        bool isMatching)
+    {
+        return this with
+        {
+            IsMatching = isMatching,
         };
     }
 }

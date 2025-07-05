@@ -45,7 +45,10 @@ internal sealed class GemFallSystem :
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        var allGemsAttachedToGameBoard = true;
+        var anyGemIsFalling = false;
+
+        var gameBoardRectTransform = _rectTransformStore.Get(
+            _playContext.GameBoardEntity);
 
         foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
@@ -56,30 +59,29 @@ internal sealed class GemFallSystem :
                 continue;
             }
 
-            var gemRectTransform = _rectTransformStore.Get(gemEntity);
-
             var targetGameBoardFieldPosition = gemPlayBehavior
                 .TargetGameBoardFieldPosition!.Value;
 
-            var newGemRectTransform = MoveGemToTargetGameBoardField(
+            MoveGemToTargetGameBoardField(
                 gemEntity,
-                gemRectTransform,
                 targetGameBoardFieldPosition,
                 deltaTime);
 
+            TryUpdateGemVisibility(
+                gemEntity,
+                gameBoardRectTransform);
+
             if (!TryAttachGemToGameBoardField(
-                    gemEntity,
-                    gemPlayBehavior,
-                    newGemRectTransform,
-                    targetGameBoardFieldPosition))
+                gemEntity,
+                targetGameBoardFieldPosition))
             {
-                allGemsAttachedToGameBoard = false;
+                anyGemIsFalling = true;
             }
         }
 
-        if (allGemsAttachedToGameBoard)
+        if (!anyGemIsFalling)
         {
-            _playContext.SetPlayState(PlayState.WaitingForInput);
+            _playContext.SetPlayState(PlayState.MatchingGems);
         }
     }
 
@@ -88,10 +90,11 @@ internal sealed class GemFallSystem :
 
     private RectTransform MoveGemToTargetGameBoardField(
         Entity gemEntity,
-        RectTransform gemRectTransform,
         Vector2 targetGameBoardFieldPosition,
         float deltaTime)
     {
+        var gemRectTransform = _rectTransformStore.Get(gemEntity);
+
         var newGemPosition = gemRectTransform.Position.MoveTowards(
             targetGameBoardFieldPosition,
             Constants.GemFallSpeed * deltaTime);
@@ -108,10 +111,17 @@ internal sealed class GemFallSystem :
 
     private void TryUpdateGemVisibility(
         Entity gemEntity,
-        GemPlayBehavior gemPlayBehavior,
-        RectTransform gemRectTransform,
         RectTransform gameBoardRectTransform)
     {
+        var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
+
+        if (gemPlayBehavior.IsVisible)
+        {
+            return;
+        }
+
+        var gemRectTransform = _rectTransformStore.Get(gemEntity);
+
         if (gemRectTransform.IsInside(gameBoardRectTransform))
         {
             _gemPlayBehaviorStore.Set(
@@ -122,14 +132,16 @@ internal sealed class GemFallSystem :
 
     private bool TryAttachGemToGameBoardField(
         Entity gemEntity,
-        GemPlayBehavior gemPlayBehavior,
-        RectTransform gemRectTransform,
         Vector2 targetGameBoardFieldPosition)
     {
+        var gemRectTransform = _rectTransformStore.Get(gemEntity);
+
         if (gemRectTransform.Position != targetGameBoardFieldPosition)
         {
             return false;
         }
+
+        var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
         gemPlayBehavior
             .TargetGameBoardField!
