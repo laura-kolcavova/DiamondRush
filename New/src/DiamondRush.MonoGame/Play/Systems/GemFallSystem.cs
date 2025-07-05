@@ -45,7 +45,19 @@ internal sealed class GemFallSystem :
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        var anyGemIsFalling = false;
+        if (TryFallAndAttachGems(deltaTime))
+        {
+            _playContext.SetPlayState(PlayState.MatchingGems);
+        }
+    }
+
+    private bool IsUpdateEnabled() =>
+        _playContext.PlayState == PlayState.FallingGems;
+
+    private bool TryFallAndAttachGems(
+        float deltaTime)
+    {
+        var allGemsAttached = true;
 
         var gameBoardRectTransform = _rectTransformStore.Get(
             _playContext.GameBoardEntity);
@@ -75,18 +87,12 @@ internal sealed class GemFallSystem :
                 gemEntity,
                 targetGameBoardFieldPosition))
             {
-                anyGemIsFalling = true;
+                allGemsAttached = false;
             }
         }
 
-        if (!anyGemIsFalling)
-        {
-            _playContext.SetPlayState(PlayState.MatchingGems);
-        }
+        return allGemsAttached;
     }
-
-    private bool IsUpdateEnabled() =>
-        _playContext.PlayState == PlayState.FallingGems;
 
     private RectTransform MoveGemToTargetGameBoardField(
         Entity gemEntity,

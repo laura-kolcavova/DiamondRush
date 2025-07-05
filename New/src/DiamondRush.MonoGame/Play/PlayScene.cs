@@ -91,7 +91,11 @@ internal sealed class PlayScene : Scene
             _entityContext,
             playContext));
 
-        _systemManager.AddSystem(new GemMatchingSystem(
+        _systemManager.AddSystem(new GemMatchSystem(
+            _entityContext,
+            playContext));
+
+        _systemManager.AddSystem(new GemCollectSystem(
             _entityContext,
             playContext));
 

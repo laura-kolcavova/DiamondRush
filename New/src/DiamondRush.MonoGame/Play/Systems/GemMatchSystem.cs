@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace DiamondRush.MonoGame.Play.Systems;
 
-internal sealed class GemMatchingSystem :
+internal sealed class GemMatchSystem :
     IUpdateSystem
 {
     private readonly PlayContext _playContext;
@@ -15,7 +15,7 @@ internal sealed class GemMatchingSystem :
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
 
-    public GemMatchingSystem(
+    public GemMatchSystem(
         IEntityContext entityContext,
         PlayContext playContext)
     {
@@ -32,7 +32,7 @@ internal sealed class GemMatchingSystem :
             return;
         }
 
-        if (SearchForMatchingGems())
+        if (TrySearchForMatchingGems())
         {
             _playContext.SetPlayState(PlayState.CollectingGems);
         }
@@ -42,7 +42,10 @@ internal sealed class GemMatchingSystem :
         }
     }
 
-    private bool SearchForMatchingGems()
+    private bool IsUpdateEnabled() =>
+      _playContext.PlayState == PlayState.MatchingGems;
+
+    private bool TrySearchForMatchingGems()
     {
         var rows = _playContext.GameBoardFields.Rows;
 
@@ -57,7 +60,7 @@ internal sealed class GemMatchingSystem :
                 .GetFieldsInRow(rowIndex)
                 .ToArray();
 
-            if (SearchForMatchingGemsInGroup(gameBoardFieldsInRow))
+            if (TrySearchForMatchingGemsInGroup(gameBoardFieldsInRow))
             {
                 anyMatchingGemsFound = true;
             }
@@ -70,7 +73,7 @@ internal sealed class GemMatchingSystem :
                 .GetFieldsInColumn(columnIndex)
                 .ToArray();
 
-            if (SearchForMatchingGemsInGroup(gameBoardFieldInColumn))
+            if (TrySearchForMatchingGemsInGroup(gameBoardFieldInColumn))
             {
                 anyMatchingGemsFound = true;
             }
@@ -79,7 +82,7 @@ internal sealed class GemMatchingSystem :
         return anyMatchingGemsFound;
     }
 
-    private bool SearchForMatchingGemsInGroup(
+    private bool TrySearchForMatchingGemsInGroup(
         GameBoardField[] gameBoardFields)
     {
         var matchingGemsCount = 0;
@@ -169,11 +172,7 @@ internal sealed class GemMatchingSystem :
 
             _gemPlayBehaviorStore.Set(
                 gameBoardField.GemEntity,
-                gemPlayBehavior.SetIsMatching(true));
+                gemPlayBehavior.MarkAsMatching());
         }
     }
-
-
-    private bool IsUpdateEnabled() =>
-       _playContext.PlayState == PlayState.MatchingGems;
 }
