@@ -91,6 +91,9 @@ internal sealed class PlayScene : Scene
             _entityContext,
             playContext));
 
+        _systemManager.AddSystem(new GemVisibilitySystem(
+            _entityContext));
+
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
             _playSceneContent));

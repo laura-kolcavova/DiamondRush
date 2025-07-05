@@ -18,6 +18,8 @@ internal sealed class RenderSystem :
 
     private readonly GameBoardEntityRenderer _gameBoardEntityRenderer;
 
+    private readonly GemEntityRenderer _gemEntityRenderer;
+
     public RenderSystem(
         IEntityContext entityContext,
         SpriteBatch spriteBatch)
@@ -36,6 +38,10 @@ internal sealed class RenderSystem :
         _gameBoardEntityRenderer = new GameBoardEntityRenderer(
             entityContext,
             spriteBatch);
+
+        _gemEntityRenderer = new GemEntityRenderer(
+            entityContext,
+            spriteBatch);
     }
 
     public void Draw(GameTime gameTime)
@@ -48,6 +54,9 @@ internal sealed class RenderSystem :
             {
                 case EntityType.GameBoard:
                     _gameBoardEntityRenderer.Render(entity);
+                    break;
+                case EntityType.Gem:
+                    _gemEntityRenderer.Render(entity);
                     break;
                 default:
                     _entitySpriteRenderer.Render(entity);

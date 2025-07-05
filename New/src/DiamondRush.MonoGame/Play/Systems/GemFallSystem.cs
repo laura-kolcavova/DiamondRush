@@ -11,33 +11,31 @@ namespace DiamondRush.MonoGame.Play.Systems;
 internal sealed class GemFallSystem :
     IUpdateSystem
 {
-    private readonly IEntityContext _entityContext;
-
     private readonly PlayContext _playContext;
+
+    private readonly IEntityView _gemEntityView;
 
     private readonly IComponentStore<RectTransform> _rectTransformStore;
 
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
-    private readonly IEntityView _fallingGemsView;
-
     public GemFallSystem(
         IEntityContext entityContext,
         PlayContext playContext)
     {
-        _entityContext = entityContext;
         _playContext = playContext;
 
-        _rectTransformStore = _entityContext.UseStore<RectTransform>();
-        _gemPlayBehaviorStore = _entityContext.UseStore<GemPlayBehavior>();
-
-        _fallingGemsView = _entityContext
+        _gemEntityView = entityContext
             .UseQuery()
             .With<Gem>()
             .With<RectTransform>()
             .With<GemPlayBehavior>()
             .AsView();
+
+        _rectTransformStore = entityContext.UseStore<RectTransform>();
+        _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }
+
     public void Update(GameTime gameTime)
     {
         if (!IsUpdateEnabled())
@@ -49,7 +47,7 @@ internal sealed class GemFallSystem :
 
         var allGemsAttachedToGameBoard = true;
 
-        foreach (var gemEntity in _fallingGemsView.AsEnumerable())
+        foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
             var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
@@ -60,17 +58,20 @@ internal sealed class GemFallSystem :
 
             var gemRectTransform = _rectTransformStore.Get(gemEntity);
 
-            if (MoveGemToTargetGameBoardField(
+            var targetGameBoardFieldPosition = gemPlayBehavior
+                .TargetGameBoardFieldPosition!.Value;
+
+            var newGemRectTransform = MoveGemToTargetGameBoardField(
                 gemEntity,
                 gemRectTransform,
-                gemPlayBehavior.TargetGameBoardFieldPosition!.Value,
-                deltaTime))
-            {
-                AttachGemToGameBoardField(
+                targetGameBoardFieldPosition,
+                deltaTime);
+
+            if (!TryAttachGemToGameBoardField(
                     gemEntity,
-                    gemPlayBehavior);
-            }
-            else
+                    gemPlayBehavior,
+                    newGemRectTransform,
+                    targetGameBoardFieldPosition))
             {
                 allGemsAttachedToGameBoard = false;
             }
@@ -85,7 +86,7 @@ internal sealed class GemFallSystem :
     private bool IsUpdateEnabled() =>
         _playContext.PlayState == PlayState.FallingGems;
 
-    private bool MoveGemToTargetGameBoardField(
+    private RectTransform MoveGemToTargetGameBoardField(
         Entity gemEntity,
         RectTransform gemRectTransform,
         Vector2 targetGameBoardFieldPosition,
@@ -102,18 +103,34 @@ internal sealed class GemFallSystem :
             gemEntity,
             newGemRectTransform);
 
-        if (newGemPosition == targetGameBoardFieldPosition)
-        {
-            return true;
-        }
-
-        return false;
+        return newGemRectTransform;
     }
 
-    private void AttachGemToGameBoardField(
+    private void TryUpdateGemVisibility(
         Entity gemEntity,
-        GemPlayBehavior gemPlayBehavior)
+        GemPlayBehavior gemPlayBehavior,
+        RectTransform gemRectTransform,
+        RectTransform gameBoardRectTransform)
     {
+        if (gemRectTransform.IsInside(gameBoardRectTransform))
+        {
+            _gemPlayBehaviorStore.Set(
+                gemEntity,
+                gemPlayBehavior.SetVisibility(true));
+        }
+    }
+
+    private bool TryAttachGemToGameBoardField(
+        Entity gemEntity,
+        GemPlayBehavior gemPlayBehavior,
+        RectTransform gemRectTransform,
+        Vector2 targetGameBoardFieldPosition)
+    {
+        if (gemRectTransform.Position != targetGameBoardFieldPosition)
+        {
+            return false;
+        }
+
         gemPlayBehavior
             .TargetGameBoardField!
             .AttachGem(gemEntity);
@@ -121,5 +138,7 @@ internal sealed class GemFallSystem :
         _gemPlayBehaviorStore.Set(
             gemEntity,
             gemPlayBehavior.FinishFallingToGameBoardField());
+
+        return true;
     }
 }
