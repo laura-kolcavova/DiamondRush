@@ -76,6 +76,8 @@ internal sealed class PlayScene : Scene
             gameBoardEntity,
             gameBoard);
 
+        playContext.SetPlayState(PlayState.SpawningNewGems);
+
         _systemManager.AddSystem(new RenderSystem(
             _entityContext,
             _spriteBatch));
@@ -83,6 +85,10 @@ internal sealed class PlayScene : Scene
         _systemManager.AddSystem(new GemSpawnSystem(
             _entityContext,
             _playSceneContent,
+            playContext));
+
+        _systemManager.AddSystem(new GemFallSystem(
+            _entityContext,
             playContext));
 
         _systemManager.AddSystem(new DiagnosticSystem(

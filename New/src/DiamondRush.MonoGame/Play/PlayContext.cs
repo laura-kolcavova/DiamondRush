@@ -13,11 +13,10 @@ internal sealed class PlayContext
 
     public PlayState PlayState { get; private set; }
 
-    public PlayContext(
+    private PlayContext(
         Entity gameBoardEntity,
         GameBoard gameBoard,
-        GameBoardFields gameBoardFields,
-        PlayState initialPlayState)
+        GameBoardFields gameBoardFields)
     {
         GameBoardEntity = gameBoardEntity;
 
@@ -25,7 +24,7 @@ internal sealed class PlayContext
 
         GameBoardFields = gameBoardFields;
 
-        PlayState = initialPlayState;
+        PlayState = PlayState.WaitingForInput;
     }
 
     public void SetPlayState(
@@ -43,7 +42,6 @@ internal sealed class PlayContext
         return new PlayContext(
             gameBoardEntity,
             gameBoard,
-            gameBoardFields,
-            PlayState.SpawningNewGems);
+            gameBoardFields);
     }
 }
