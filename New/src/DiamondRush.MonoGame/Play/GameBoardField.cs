@@ -1,10 +1,10 @@
-﻿using DiamondRush.MonoGame.Play.Components;
+﻿using LightECS;
 
 namespace DiamondRush.MonoGame.Play;
 
 internal sealed class GameBoardField
 {
-    private Gem? _gem;
+    private Entity? _gemEntity;
 
     public int RowIndex { get; }
 
@@ -18,20 +18,20 @@ internal sealed class GameBoardField
         ColumnIndex = columnIndex;
     }
 
-    public Gem Gem => _gem
+    public Entity GemEntity => _gemEntity
         ?? throw new InvalidOperationException("No gem is attached to this field.");
 
-    public bool IsEmpty => _gem is null;
+    public bool IsEmpty => _gemEntity is null;
 
-    public bool IsOccupied => _gem is not null;
+    public bool IsOccupied => _gemEntity is not null;
 
-    public void AttachGem(Gem gem)
+    public void AttachGem(Entity gemEntity)
     {
-        _gem = gem;
+        _gemEntity = gemEntity;
     }
 
     public void DetachGem()
     {
-        _gem = null;
+        _gemEntity = null;
     }
 }

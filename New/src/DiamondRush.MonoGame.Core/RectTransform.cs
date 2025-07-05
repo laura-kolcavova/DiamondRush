@@ -10,4 +10,13 @@ public sealed record RectTransform
     public float Width { get; init; } = 0;
 
     public float Height { get; init; } = 0;
+
+    public RectTransform UpdatePosition(
+        Vector2 newPosition)
+    {
+        return this with
+        {
+            Position = newPosition,
+        };
+    }
 }

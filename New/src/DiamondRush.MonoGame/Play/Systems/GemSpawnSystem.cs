@@ -1,5 +1,6 @@
 ﻿using DiamondRush.MonoGame.Core;
 using DiamondRush.MonoGame.Core.Systems;
+using DiamondRush.MonoGame.Play.Components;
 using DiamondRush.MonoGame.Play.Content.Abstractions;
 using DiamondRush.MonoGame.Play.Factories;
 using LightECS;
@@ -19,7 +20,7 @@ internal sealed class GemSpawnSystem :
 
     private readonly IComponentStore<RectTransform> _rectTransformStore;
 
-    private readonly Random _random;
+    private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
     public GemSpawnSystem(
         IEntityContext entityContext,
@@ -27,14 +28,12 @@ internal sealed class GemSpawnSystem :
         PlayContext playContext)
     {
         _entityContext = entityContext;
-
         _playContext = playContext;
 
         _gemEntityFactory = new GemEntityFactory(playSceneContentProvider);
 
         _rectTransformStore = _entityContext.UseStore<RectTransform>();
-
-        _random = new Random();
+        _gemPlayBehaviorStore = _entityContext.UseStore<GemPlayBehavior>();
     }
 
     public void Update(GameTime gameTime)
@@ -47,7 +46,7 @@ internal sealed class GemSpawnSystem :
         var emptyGameBoardFields = FindEmptyGameBoardFields(
             _playContext.GameBoardFields);
 
-        if (emptyGameBoardFields.Count == 0)
+        if (!emptyGameBoardFields.Any())
         {
             _playContext.SetPlayState(PlayState.WaitingForInput);
 
@@ -59,34 +58,50 @@ internal sealed class GemSpawnSystem :
             CreateGemForGameBoardField(gameBoardField);
         }
 
-        _playContext.SetPlayState(PlayState.WaitingForInput);
+        _playContext.SetPlayState(PlayState.FallingGems);
     }
 
     private bool IsUpdateEnabled() =>
         _playContext.PlayState == PlayState.SpawningNewGems;
 
-    private IReadOnlyCollection<GameBoardField> FindEmptyGameBoardFields(
+    private IEnumerable<GameBoardField> FindEmptyGameBoardFields(
         GameBoardFields gameBoardFields)
     {
         return _playContext
             .GameBoardFields
             .AsEnumerable()
-            .Where(gameBoardField => gameBoardField.IsEmpty)
-            .ToList();
+            .Where(gameBoardField => gameBoardField.IsEmpty);
     }
 
     private Entity CreateGemForGameBoardField(
         GameBoardField gameBoardField)
     {
-        var position = GetGameBoardFieldPosition(
-            gameBoardField);
+        var gameBoardFieldPosition = GetGameBoardFieldPosition(
+          gameBoardField);
+
+        var gameBoardRectTransform = _rectTransformStore.Get(
+           _playContext.GameBoardEntity);
+
+        var gemPosition = new Vector2(
+            gameBoardFieldPosition.X,
+            gameBoardFieldPosition.Y - gameBoardRectTransform.Height);
 
         var gemType = GetRandomGemType();
 
-        return _gemEntityFactory.Create(
+        var gemEntity = _gemEntityFactory.Create(
             _entityContext,
             gemType,
-            position);
+            gemPosition);
+
+        var gemPlayBehavior = new GemPlayBehavior();
+
+        _gemPlayBehaviorStore.Set(
+            gemEntity,
+            gemPlayBehavior.StartFallingToGameBoardField(
+                gameBoardField,
+                gameBoardFieldPosition));
+
+        return gemEntity;
     }
 
     private Vector2 GetGameBoardFieldPosition(

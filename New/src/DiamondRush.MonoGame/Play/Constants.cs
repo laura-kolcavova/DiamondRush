@@ -23,4 +23,6 @@ internal static class Constants
     public const int GemWidth = 64;
 
     public const int GemHeight = 64;
+
+    public const float GemFallSpeed = 500f;
 }
