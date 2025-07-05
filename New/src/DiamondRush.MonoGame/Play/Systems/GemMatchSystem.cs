@@ -91,18 +91,16 @@ internal sealed class GemMatchSystem :
 
         var anyMatchingGemsFound = false;
 
-        var lastIndex = -1;
-
-        foreach (var gameBoardField in gameBoardFields)
+        for (var gameBoardFieldIndex = 0; gameBoardFieldIndex < gameBoardFields.Length; gameBoardFieldIndex++)
         {
-            lastIndex++;
+            var gameBoardField = gameBoardFields[gameBoardFieldIndex];
 
             if (gameBoardField.IsEmpty)
             {
                 if (TryMarkMatchingGems(
                     gameBoardFields,
                     matchingGemsCount,
-                    lastIndex))
+                    gameBoardFieldIndex))
                 {
                     anyMatchingGemsFound = true;
                 }
@@ -115,24 +113,42 @@ internal sealed class GemMatchSystem :
 
             var gem = _gemStore.Get(gameBoardField.GemEntity);
 
-            if (previousGemType is not null &&
-                gem.GemType == previousGemType.Value)
+            if (previousGemType is null)
             {
-                matchingGemsCount++;
+                matchingGemsCount = 1;
+                previousGemType = gem.GemType;
 
                 continue;
             }
 
-            if (TryMarkMatchingGems(
-                gameBoardFields,
-                matchingGemsCount,
-                lastIndex))
+            if (gem.GemType != previousGemType.Value)
             {
-                anyMatchingGemsFound = true;
+                if (TryMarkMatchingGems(
+                    gameBoardFields,
+                    matchingGemsCount,
+                    gameBoardFieldIndex))
+                {
+                    anyMatchingGemsFound = true;
+                }
+
+                matchingGemsCount = 1;
+                previousGemType = gem.GemType;
+
+                continue;
             }
 
-            matchingGemsCount = 1;
-            previousGemType = gem.GemType;
+            matchingGemsCount++;
+
+            if (gameBoardFieldIndex == gameBoardFields.Length - 1)
+            {
+                if (TryMarkMatchingGems(
+                    gameBoardFields,
+                    matchingGemsCount,
+                    gameBoardFieldIndex))
+                {
+                    anyMatchingGemsFound = true;
+                }
+            }
         }
 
         return anyMatchingGemsFound;
