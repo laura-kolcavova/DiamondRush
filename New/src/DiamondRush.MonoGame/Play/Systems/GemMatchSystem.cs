@@ -57,7 +57,7 @@ internal sealed class GemMatchSystem :
         {
             var gameBoardFieldsInRow = _playContext
                 .GameBoardFields
-                .GetFieldsInRow(rowIndex)
+                .FieldsInRow(rowIndex)
                 .ToArray();
 
             if (TrySearchForMatchingGemsInGroup(gameBoardFieldsInRow))
@@ -70,7 +70,7 @@ internal sealed class GemMatchSystem :
         {
             var gameBoardFieldInColumn = _playContext
                 .GameBoardFields
-                .GetFieldsInColumn(columnIndex)
+                .FieldsInColumn(columnIndex)
                 .ToArray();
 
             if (TrySearchForMatchingGemsInGroup(gameBoardFieldInColumn))

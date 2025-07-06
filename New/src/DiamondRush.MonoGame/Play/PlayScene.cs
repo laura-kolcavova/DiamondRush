@@ -1,4 +1,5 @@
-﻿using DiamondRush.MonoGame.Core.Scenes;
+﻿using DiamondRush.MonoGame.Core;
+using DiamondRush.MonoGame.Core.Scenes;
 using DiamondRush.MonoGame.Core.Services;
 using DiamondRush.MonoGame.Core.Systems;
 using DiamondRush.MonoGame.Play.Components;
@@ -72,9 +73,13 @@ internal sealed class PlayScene : Scene
 
         var gameBoard = _entityContext.Get<GameBoard>(gameBoardEntity);
 
+        var gameBoardRectTransform = _entityContext.Get<RectTransform>(gameBoardEntity);
+
         var playContext = PlayContext.CreateDefault(
             gameBoardEntity,
             gameBoard);
+
+        playContext.ComputeGameBoardFieldPositions(gameBoardRectTransform);
 
         playContext.SetPlayState(PlayState.SpawningNewGems);
 

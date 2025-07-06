@@ -30,7 +30,7 @@ internal sealed class GameBoardFields
         return _fields[rowIndex, columnIndex];
     }
 
-    public IEnumerable<GameBoardField> GetFieldsInRow(
+    public IEnumerable<GameBoardField> FieldsInRow(
         int rowIndex)
     {
         AssertRowIndexInBounds(rowIndex);
@@ -41,7 +41,7 @@ internal sealed class GameBoardFields
         }
     }
 
-    public IEnumerable<GameBoardField> GetFieldsInColumn(
+    public IEnumerable<GameBoardField> FieldsInColumn(
         int columnIndex)
     {
         AssertColumnIndexInBounds(columnIndex);
