@@ -1,6 +1,5 @@
 ﻿
 using LightECS;
-using Microsoft.Xna.Framework;
 
 namespace DiamondRush.MonoGame.Play.Components;
 
@@ -10,7 +9,7 @@ internal sealed record GemPlayBehavior
 
     public GameBoardField? TargetGameBoardField { get; private set; }
 
-    public Vector2? TargetGameBoardFieldPosition { get; private set; }
+    public bool IsAttachedToGameBoardField { get; private set; }
 
     public bool IsFalling { get; private set; }
 
@@ -29,13 +28,11 @@ internal sealed record GemPlayBehavior
     }
 
     public GemPlayBehavior StartFallingToGameBoardField(
-        GameBoardField targetGameBoardField,
-        Vector2 targetGameBoardFieldPosition)
+        GameBoardField targetGameBoardField)
     {
         return this with
         {
             TargetGameBoardField = targetGameBoardField,
-            TargetGameBoardFieldPosition = targetGameBoardFieldPosition,
             IsFalling = true,
         };
     }
@@ -45,7 +42,6 @@ internal sealed record GemPlayBehavior
         return this with
         {
             TargetGameBoardField = null,
-            TargetGameBoardFieldPosition = null,
             IsFalling = false,
         };
     }

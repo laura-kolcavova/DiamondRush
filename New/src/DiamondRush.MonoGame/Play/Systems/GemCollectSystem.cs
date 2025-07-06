@@ -39,8 +39,6 @@ internal sealed class GemCollectSystem :
 
         foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
-            var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
-
             TryMarkGemAsCollecting(gemEntity);
 
             TryCollectGem(gemEntity);

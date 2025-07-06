@@ -23,8 +23,7 @@ internal sealed class GemEntityFactory
 
     public Entity Create(
         IEntityContext entityContext,
-        GemType gemType,
-        Vector2 position)
+        GemType gemType)
     {
         var entity = entityContext.CreateEntity();
 
@@ -47,7 +46,6 @@ internal sealed class GemEntityFactory
 
         var rectTransform = new RectTransform
         {
-            Position = position,
             Width = Constants.GemWidth,
             Height = Constants.GemHeight,
         };
