@@ -108,7 +108,7 @@ internal sealed class GemSpawnSystem :
             gemEntity,
             gemRectTransform.UpdatePosition(gemPosition));
 
-        var gemPlayBehavior = new GemPlayBehavior(gameBoardEntity);
+        var gemPlayBehavior = new GemPlayBehavior();
 
         _gemPlayBehaviorStore.Set(
             gemEntity,

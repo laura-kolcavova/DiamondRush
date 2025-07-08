@@ -14,7 +14,6 @@ internal sealed class GemMatchSystem :
 
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
-
     public GemMatchSystem(
         IEntityContext entityContext,
         PlayContext playContext)

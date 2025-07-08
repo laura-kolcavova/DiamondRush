@@ -19,7 +19,7 @@ internal sealed class GemFallSystem :
 
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
-    private bool _searchingForFallingGems = true;
+    private bool _startFallingGemsFinished = false;
 
     public GemFallSystem(
         IEntityContext entityContext,
@@ -45,11 +45,22 @@ internal sealed class GemFallSystem :
             return;
         }
 
-        if (_searchingForFallingGems)
+        if (!_startFallingGemsFinished)
         {
-            SearchForFallingGems();
+            if (StartFallingGems())
+            {
+                _playContext.ClearSpawnedGemEntities();
 
-            return;
+                _startFallingGemsFinished = true;
+            }
+            else
+            {
+                _playContext.SetPlayState(PlayState.WaitingForInput);
+
+                _startFallingGemsFinished = false;
+
+                return;
+            }
         }
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -57,59 +68,79 @@ internal sealed class GemFallSystem :
         if (TryFallAndAttachGems(deltaTime))
         {
             _playContext.SetPlayState(PlayState.MatchingGems);
-            _searchingForFallingGems = true;
+
+            _startFallingGemsFinished = false;
         }
     }
 
     private bool IsUpdateEnabled() =>
         _playContext.PlayState == PlayState.FallingGems;
 
-    private void SearchForFallingGems()
+    private bool StartFallingGems()
     {
+        var anyGemIsFalling = false;
+
         for (var columnIndex = 0; columnIndex < _playContext.GameBoardFields.Columns; columnIndex++)
         {
-            SearchForFallingGemsInColumn(columnIndex);
+            if (StartFallingGemsInColumn(columnIndex))
+            {
+                anyGemIsFalling = true;
+            }
         }
+
+        return anyGemIsFalling;
     }
 
-    private void SearchForFallingGemsInColumn(
+    private bool StartFallingGemsInColumn(
         int columnIndex)
     {
+        var anyGemIsFalling = false;
+
         var lowestEmptyGameBoardField = _playContext
             .GameBoardFields
-            .AsEnumerable()
+            .FieldsInColumn(columnIndex)
             .LastOrDefault(gameBoardField => gameBoardField.IsEmpty);
 
         if (lowestEmptyGameBoardField is null)
         {
-            return;
+            return false;
         }
 
         var nextTargetRowIndex = lowestEmptyGameBoardField.RowIndex;
 
-        SearchForFallingGemsInGameBoardColumn(
+        if (StartFallingGemsInGameBoardColumn(
             columnIndex,
             lowestEmptyGameBoardField.RowIndex,
-            ref nextTargetRowIndex);
+            ref nextTargetRowIndex))
+        {
+            anyGemIsFalling = true;
+        }
 
-        SearchForFallingSpawnedGems(
+        if (StartFallingSpawnedGems(
             columnIndex,
-            ref nextTargetRowIndex);
+            ref nextTargetRowIndex))
+        {
+            anyGemIsFalling = true;
+        }
+
+        return anyGemIsFalling;
     }
 
-    private void SearchForFallingGemsInGameBoardColumn(
+    private bool StartFallingGemsInGameBoardColumn(
         int columnIndex,
         int lowestEmptyGameBoardFieldRowIndex,
         ref int nextTargetRowIndex)
     {
         if (lowestEmptyGameBoardFieldRowIndex == 0)
         {
-            return;
+            return false;
         }
+
+        var anyGemIsFalling = false;
 
         var startRowIndex = lowestEmptyGameBoardFieldRowIndex - 1;
 
-        for (var rowIndex = startRowIndex; rowIndex <= 0; rowIndex--)
+        for (var rowIndex = startRowIndex; rowIndex >= 0; rowIndex--)
         {
             var gameBoardFieldToDetach = _playContext
                 .GameBoardFields
@@ -128,17 +159,18 @@ internal sealed class GemFallSystem :
 
             StartFallingGemEntity(
                 detachedGemEntity,
-                columnIndex,
-                nextTargetRowIndex);
+                nextTargetRowIndex,
+                columnIndex);
 
             nextTargetRowIndex--;
 
-            // TODO return boolean to indicate that gems were found in this column
-            _searchingForFallingGems = false;
+            anyGemIsFalling = true;
         }
+
+        return anyGemIsFalling;
     }
 
-    private void SearchForFallingSpawnedGems(
+    private bool StartFallingSpawnedGems(
         int columnIndex,
         ref int nextTargetRowIndex)
     {
@@ -146,41 +178,35 @@ internal sealed class GemFallSystem :
             columnIndex,
             out var spawnedGemEntityStack))
         {
-            return;
+            return false;
         }
 
         foreach (var spawnedGemEntity in spawnedGemEntityStack)
         {
             StartFallingGemEntity(
               spawnedGemEntity,
-              columnIndex,
-              nextTargetRowIndex);
+              nextTargetRowIndex,
+              columnIndex);
 
             nextTargetRowIndex--;
-
-            // TODO return boolean to indicate that gems were found in this column
-            _searchingForFallingGems = false;
         }
+
+        return true;
     }
 
     private void StartFallingGemEntity(
         Entity gemEntity,
-        int columnIndex,
-        int targetRowIndex)
+        int targetRowIndex,
+        int targetColumnIndex)
     {
-        var targetGameBoardField = _playContext
-            .GameBoardFields
-            .GetField(
-                targetRowIndex,
-                columnIndex);
-
         var gemPlayBehavior = _gemPlayBehaviorStore.Get(
             gemEntity);
 
         _gemPlayBehaviorStore.Set(
             gemEntity,
-            gemPlayBehavior
-                .StartFallingToGameBoardField(targetGameBoardField));
+            gemPlayBehavior.StartFallingToGameBoardField(
+                targetRowIndex,
+                targetColumnIndex));
     }
 
     private bool TryFallAndAttachGems(
@@ -200,8 +226,12 @@ internal sealed class GemFallSystem :
                 continue;
             }
 
+            var targetGameBoardField = _playContext.GameBoardFields.GetField(
+                gemPlayBehavior.TargetRowIndex,
+                gemPlayBehavior.TargetColumnIndex);
+
             var targetGameBoardFieldPosition = _playContext.GetGameBoardFieldPosition(
-                gemPlayBehavior.TargetGameBoardField!);
+                targetGameBoardField);
 
             MoveGemToTargetGameBoardField(
                 gemEntity,
@@ -214,6 +244,7 @@ internal sealed class GemFallSystem :
 
             if (!TryAttachGemToGameBoardField(
                 gemEntity,
+                targetGameBoardField,
                 targetGameBoardFieldPosition))
             {
                 allGemsAttached = false;
@@ -267,6 +298,7 @@ internal sealed class GemFallSystem :
 
     private bool TryAttachGemToGameBoardField(
         Entity gemEntity,
+        GameBoardField gameBoardField,
         Vector2 targetGameBoardFieldPosition)
     {
         var gemRectTransform = _rectTransformStore.Get(gemEntity);
@@ -278,8 +310,7 @@ internal sealed class GemFallSystem :
 
         var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
-        gemPlayBehavior
-            .TargetGameBoardField!
+        gameBoardField
             .AttachGem(gemEntity);
 
         _gemPlayBehaviorStore.Set(

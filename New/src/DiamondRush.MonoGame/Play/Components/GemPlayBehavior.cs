@@ -1,17 +1,16 @@
-﻿
-using LightECS;
-
-namespace DiamondRush.MonoGame.Play.Components;
+﻿namespace DiamondRush.MonoGame.Play.Components;
 
 internal sealed record GemPlayBehavior
 {
-    public Entity GameBoardEntity { get; }
+    public int TargetRowIndex { get; private set; } = -1;
 
-    public GameBoardField? TargetGameBoardField { get; private set; }
+    public int TargetColumnIndex { get; private set; } = -1;
 
-    public bool IsAttachedToGameBoardField { get; private set; }
+    public int AttachedToRowIndex { get; private set; } = -1;
 
-    public bool IsFalling { get; private set; }
+    public int AttachedColumnIndex { get; private set; } = -1;
+
+    public bool IsFalling { get; private set; } = false;
 
     public bool IsVisible { get; private set; } = true;
 
@@ -21,18 +20,14 @@ internal sealed record GemPlayBehavior
 
     public bool IsCollected { get; init; } = false;
 
-    public GemPlayBehavior(
-        Entity gameBoardEntity)
-    {
-        GameBoardEntity = gameBoardEntity;
-    }
-
     public GemPlayBehavior StartFallingToGameBoardField(
-        GameBoardField targetGameBoardField)
+        int rowIndex,
+        int columnIndex)
     {
         return this with
         {
-            TargetGameBoardField = targetGameBoardField,
+            TargetRowIndex = rowIndex,
+            TargetColumnIndex = columnIndex,
             IsFalling = true,
         };
     }
@@ -41,7 +36,10 @@ internal sealed record GemPlayBehavior
     {
         return this with
         {
-            TargetGameBoardField = null,
+            AttachedToRowIndex = TargetRowIndex,
+            AttachedColumnIndex = TargetColumnIndex,
+            TargetRowIndex = -1,
+            TargetColumnIndex = -1,
             IsFalling = false,
         };
     }
@@ -75,6 +73,8 @@ internal sealed record GemPlayBehavior
     {
         return this with
         {
+            AttachedToRowIndex = -1,
+            AttachedColumnIndex = -1,
             IsCollecting = false,
             IsCollected = true,
         };

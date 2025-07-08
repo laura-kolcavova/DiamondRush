@@ -1,6 +1,5 @@
 ﻿using DiamondRush.MonoGame.Core.Systems;
 using DiamondRush.MonoGame.Play.Components;
-using LightECS;
 using LightECS.Abstractions;
 using Microsoft.Xna.Framework;
 
@@ -14,6 +13,8 @@ internal sealed class GemCollectSystem :
     private readonly IEntityView _gemEntityView;
 
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
+
+    private bool _startCollectMatchingGemsFinished = false;
 
     public GemCollectSystem(
         IEntityContext entityContext,
@@ -37,53 +38,83 @@ internal sealed class GemCollectSystem :
             return;
         }
 
-        foreach (var gemEntity in _gemEntityView.AsEnumerable())
+        if (!_startCollectMatchingGemsFinished)
         {
-            TryMarkGemAsCollecting(gemEntity);
+            if (StartCollectingMatchingGems())
+            {
+                _startCollectMatchingGemsFinished = true;
+            }
+            else
+            {
+                _playContext.SetPlayState(PlayState.WaitingForInput);
 
-            TryCollectGem(gemEntity);
+                _startCollectMatchingGemsFinished = false;
+
+                return;
+            }
         }
+
+        FinishCollectingGems();
+
+        _playContext.SetPlayState(PlayState.SpawningNewGems);
     }
 
     private bool IsUpdateEnabled() =>
         _playContext.PlayState == PlayState.CollectingGems;
 
-    private void TryMarkGemAsCollecting(
-        Entity gemEntity)
+    private bool StartCollectingMatchingGems()
     {
-        var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
+        var anyGemIsCollecting = false;
 
-        if (gemPlayBehavior.IsCollecting || gemPlayBehavior.IsCollected)
+        foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
-            return;
-        }
+            var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
-        if (gemPlayBehavior.IsMatching)
-        {
+            if (!gemPlayBehavior.IsMatching)
+            {
+                continue;
+            }
+
             _gemPlayBehaviorStore.Set(
-               gemEntity,
-               gemPlayBehavior
-               .StartCollecting());
+                gemEntity,
+                gemPlayBehavior
+                .StartCollecting());
+
+            anyGemIsCollecting = true;
         }
+
+        return anyGemIsCollecting;
     }
 
-    private void TryCollectGem(
-        Entity gemEntity)
+    private void FinishCollectingGems()
     {
-        var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
-
-        if (gemPlayBehavior.IsCollected)
+        foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
-            return;
-        }
+            var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
-        if (gemPlayBehavior.IsCollecting)
-        {
+            if (!gemPlayBehavior.IsMatching)
+            {
+                continue;
+            }
+
+            if (gemPlayBehavior.IsCollected)
+            {
+                continue;
+            }
+
             _gemPlayBehaviorStore.Set(
-               gemEntity,
-               gemPlayBehavior
-               .FinishCollecting()
-               .SetVisibility(false));
+                gemEntity,
+                gemPlayBehavior
+                .FinishCollecting()
+                .SetVisibility(false));
+
+            var attachedGameBoardField = _playContext
+                .GameBoardFields
+                .GetField(
+                    gemPlayBehavior.AttachedToRowIndex,
+                    gemPlayBehavior.AttachedColumnIndex);
+
+            attachedGameBoardField.DetachGem();
         }
     }
 }
