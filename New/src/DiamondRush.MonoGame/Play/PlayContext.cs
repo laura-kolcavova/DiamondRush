@@ -123,4 +123,9 @@ internal sealed class PlayContext
             return false;
         }
     }
+
+    public void ClearSpawnedGemEntities()
+    {
+        _spawnedGemEntitiesByColumnIndex.Clear();
+    }
 }
