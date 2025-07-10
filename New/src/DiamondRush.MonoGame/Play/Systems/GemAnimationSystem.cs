@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework;
 
 namespace DiamondRush.MonoGame.Play.Systems;
 
-internal sealed class GemCollectAnimationSystem
+internal sealed class GemAnimationSystem
     : IUpdateSystem
 {
     private readonly IEntityView _gemEntityView;
 
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
-    public GemCollectAnimationSystem(
+    public GemAnimationSystem(
         IEntityContext entityContext)
     {
         _gemEntityView = entityContext

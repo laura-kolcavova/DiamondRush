@@ -83,10 +83,6 @@ internal sealed class PlayScene : Scene
 
         playContext.SetPlayState(PlayState.SpawningNewGems);
 
-        _systemManager.AddSystem(new RenderSystem(
-            _entityContext,
-            _spriteBatch));
-
         _systemManager.AddSystem(new GemSpawnSystem(
             _entityContext,
             _playSceneContent,
@@ -104,8 +100,8 @@ internal sealed class PlayScene : Scene
             _entityContext,
             playContext));
 
-        _systemManager.AddSystem(new GemCollectAnimationSystem(
-           _entityContext));
+        _systemManager.AddSystem(new GemAnimationSystem(
+            _entityContext));
 
         _systemManager.AddSystem(new GemDestroySystem(
             _entityContext));
@@ -114,10 +110,13 @@ internal sealed class PlayScene : Scene
             _entityContext,
             _playSceneContent));
 
+        _systemManager.AddSystem(new RenderSystem(
+            _entityContext,
+            _spriteBatch));
+
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
             _playSceneContent));
-
     }
 
     protected override void LoadContent()

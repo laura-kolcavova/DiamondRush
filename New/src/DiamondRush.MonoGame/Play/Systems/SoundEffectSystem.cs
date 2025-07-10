@@ -23,11 +23,17 @@ internal sealed class SoundEffectSystem
 
     public void Update(GameTime gameTime)
     {
-        if (_entityContext.State.Contains(GemCollectingStartedMessage.Name))
+        if (_entityContext
+            .State
+            .Contains(GemCollectingStartedMessage.Name))
         {
-            _playSceneContentProvider.GemCollectSoundEffect.Play();
+            _playSceneContentProvider
+                .GemCollectSoundEffect
+                .Play();
 
-            _entityContext.State.Remove(GemCollectingStartedMessage.Name);
+            _entityContext
+                .State
+                .Remove(GemCollectingStartedMessage.Name);
         }
     }
 }
