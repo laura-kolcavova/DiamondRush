@@ -30,14 +30,14 @@ internal sealed class GemCollectAnimationSystem
         {
             var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
-            if (!gemPlayBehavior.IsCollecting)
+            if (!gemPlayBehavior.CollectAnimationEnabled)
             {
                 continue;
             }
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            var step = 1f * deltaTime;
+            var step = deltaTime / (Constants.GemCollectAnimationDurationInSeconds);
 
             var newCollectAnimationProgress = Math.Min(
                 gemPlayBehavior.CollectAnimationProgress + step,

@@ -45,11 +45,34 @@ internal sealed class GemEntityRenderer
         var sprite = _spriteStore.Get(entity);
         var rectTransform = _rectTransformStore.Get(entity);
 
-        var destinationRectangle = new Rectangle(
-            (int)rectTransform.Position.X,
-            (int)rectTransform.Position.Y,
-            (int)rectTransform.Width,
-            (int)rectTransform.Height);
+        Rectangle destinationRectangle;
+
+        if (gemPlayBehavior.CollectAnimationEnabled)
+        {
+            var collectAnimationProgress = gemPlayBehavior.CollectAnimationProgress;
+
+            var scale = 1f * (1f - collectAnimationProgress);
+
+            var newWidth = rectTransform.Width * scale;
+            var newHeight = rectTransform.Height * scale;
+            var newPositionX = rectTransform.Position.X + ((rectTransform.Width - newWidth) / 2);
+            var newPositionY = rectTransform.Position.Y + ((rectTransform.Height - newHeight) / 2);
+
+            destinationRectangle = new Rectangle(
+                (int)newPositionX,
+                (int)newPositionY,
+                (int)newWidth,
+                (int)newHeight);
+        }
+
+        else
+        {
+            destinationRectangle = new Rectangle(
+                (int)rectTransform.Position.X,
+                (int)rectTransform.Position.Y,
+                (int)rectTransform.Width,
+                (int)rectTransform.Height);
+        }
 
         _spriteBatch.DrawSprite(
             sprite,
