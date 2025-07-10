@@ -20,6 +20,8 @@ internal sealed record GemPlayBehavior
 
     public bool IsCollected { get; init; } = false;
 
+    public float CollectAnimationProgress { get; init; } = 0f;
+
     public GemPlayBehavior StartFallingToGameBoardField(
         int rowIndex,
         int columnIndex)
@@ -77,6 +79,15 @@ internal sealed record GemPlayBehavior
             AttachedColumnIndex = -1,
             IsCollecting = false,
             IsCollected = true,
+        };
+    }
+
+    public GemPlayBehavior UpdateCollectAnimationProgress(
+        float progress)
+    {
+        return this with
+        {
+            CollectAnimationProgress = progress,
         };
     }
 }

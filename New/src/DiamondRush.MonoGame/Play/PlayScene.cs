@@ -104,6 +104,9 @@ internal sealed class PlayScene : Scene
             _entityContext,
             playContext));
 
+        _systemManager.AddSystem(new GemCollectAnimationSystem(
+           _entityContext));
+
         _systemManager.AddSystem(new GemDestroySystem(
             _entityContext));
 

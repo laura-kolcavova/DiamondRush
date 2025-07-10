@@ -1,4 +1,3 @@
 ﻿namespace DiamondRush.MonoGame.Core.Systems;
-public interface ISystem
-{
-}
+
+public interface ISystem;
