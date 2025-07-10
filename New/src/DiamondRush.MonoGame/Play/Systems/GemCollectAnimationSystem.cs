@@ -37,11 +37,9 @@ internal sealed class GemCollectAnimationSystem
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            var step = deltaTime / (Constants.GemCollectAnimationDurationInSeconds);
+            var step = deltaTime / Constants.GemCollectAnimationDurationInSeconds;
 
-            var newCollectAnimationProgress = Math.Min(
-                gemPlayBehavior.CollectAnimationProgress + step,
-                1f);
+            var newCollectAnimationProgress = gemPlayBehavior.CollectAnimationProgress + step;
 
             _gemPlayBehaviorStore.Set(
                    gemEntity,

@@ -91,7 +91,10 @@ internal sealed record GemPlayBehavior
     {
         return this with
         {
-            CollectAnimationProgress = progress,
+            CollectAnimationProgress = Math.Clamp(
+                progress,
+                0f,
+                1f),
         };
     }
 }
