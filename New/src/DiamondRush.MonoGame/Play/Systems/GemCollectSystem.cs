@@ -1,5 +1,6 @@
 ﻿using DiamondRush.MonoGame.Core.Systems;
 using DiamondRush.MonoGame.Play.Components;
+using DiamondRush.MonoGame.Play.Messages;
 using LightECS.Abstractions;
 using Microsoft.Xna.Framework;
 
@@ -8,6 +9,8 @@ namespace DiamondRush.MonoGame.Play.Systems;
 internal sealed class GemCollectSystem :
     IUpdateSystem
 {
+    private readonly IEntityContext _entityContext;
+
     private readonly PlayContext _playContext;
 
     private readonly IEntityView _gemEntityView;
@@ -20,6 +23,7 @@ internal sealed class GemCollectSystem :
         IEntityContext entityContext,
         PlayContext playContext)
     {
+        _entityContext = entityContext;
         _playContext = playContext;
 
         _gemEntityView = entityContext
@@ -43,6 +47,10 @@ internal sealed class GemCollectSystem :
             if (StartCollectingMatchingGems())
             {
                 _startCollectMatchingGemsFinished = true;
+
+                _entityContext.State.Set(
+                    GemCollectingStartedMessage.Name,
+                    new GemCollectingStartedMessage());
             }
             else
             {

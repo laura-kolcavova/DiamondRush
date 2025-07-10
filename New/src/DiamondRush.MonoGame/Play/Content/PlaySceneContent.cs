@@ -1,6 +1,7 @@
 ﻿using DiamondRush.MonoGame.Play.Content.Abstractions;
 using DiamondRush.MonoGame.Shared.Assets;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,6 +24,10 @@ internal sealed class PlaySceneContent :
     private Texture2D? _gemSpriteSheet;
 
     private SpriteFont? _defaultFont;
+
+    private SoundEffect? _gemPingSoundEffect;
+
+    private SoundEffect? _gemCollectSoundEffect;
 
     public PlaySceneContent(
         ContentManager contentManager,
@@ -59,6 +64,14 @@ internal sealed class PlaySceneContent :
         _defaultFont
         ??= _contentManager.Load<SpriteFont>(AssetNames.Fonts.DefaultFont);
 
+    public SoundEffect GemPingSoundEffect =>
+        _gemPingSoundEffect
+        ??= _contentManager.Load<SoundEffect>(AssetNames.Sfx.GemPing);
+
+    public SoundEffect GemCollectSoundEffect =>
+        _gemCollectSoundEffect
+        ??= _contentManager.Load<SoundEffect>(AssetNames.Sfx.GemCollect);
+
     public void LoadContent()
     {
         _blankTexture = LoadBlankTexture();
@@ -68,6 +81,10 @@ internal sealed class PlaySceneContent :
         _gemSpriteSheet = _contentManager.Load<Texture2D>(AssetNames.SpriteSheets.Gems);
 
         _defaultFont = _contentManager.Load<SpriteFont>(AssetNames.Fonts.DefaultFont);
+
+        _gemPingSoundEffect = _contentManager.Load<SoundEffect>(AssetNames.Sfx.GemPing);
+
+        _gemCollectSoundEffect = _contentManager.Load<SoundEffect>(AssetNames.Sfx.GemCollect);
     }
 
     private Texture2D LoadBlankTexture()
@@ -97,6 +114,10 @@ internal sealed class PlaySceneContent :
         _gemSpriteSheet = null;
 
         _defaultFont = null;
+
+        _gemPingSoundEffect = null;
+
+        _gemCollectSoundEffect = null;
 
         _isDisposed = true;
     }

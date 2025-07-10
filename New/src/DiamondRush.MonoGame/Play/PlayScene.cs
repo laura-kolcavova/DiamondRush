@@ -110,9 +110,14 @@ internal sealed class PlayScene : Scene
         _systemManager.AddSystem(new GemDestroySystem(
             _entityContext));
 
+        _systemManager.AddSystem(new SoundEffectSystem(
+            _entityContext,
+            _playSceneContent));
+
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
             _playSceneContent));
+
     }
 
     protected override void LoadContent()

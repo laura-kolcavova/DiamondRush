@@ -18,4 +18,11 @@ internal static class AssetNames
     {
         public const string DefaultFont = "Fonts/DefaultFont";
     }
+
+    internal static class Sfx
+    {
+        public const string GemPing = "Sfx/gem_ping";
+
+        public const string GemCollect = "Sfx/gem_collect";
+    }
 }
