@@ -51,12 +51,21 @@ internal sealed class GemEntityRenderer
         {
             var collectAnimationProgress = gemPlayBehavior.CollectAnimationProgress;
 
-            var scale = 1f * (1f - collectAnimationProgress);
+            var scale = 1f - collectAnimationProgress;
 
             var newWidth = rectTransform.Width * scale;
             var newHeight = rectTransform.Height * scale;
-            var newPositionX = rectTransform.Position.X + ((rectTransform.Width - newWidth) / 2);
-            var newPositionY = rectTransform.Position.Y + ((rectTransform.Height - newHeight) / 2);
+
+            var centerX = rectTransform.Width / 2f;
+            var centerY = rectTransform.Height / 2f;
+            var newCenterX = newWidth / 2f;
+            var newCenterY = newHeight / 2f;
+
+            //var newPositionX = rectTransform.Position.X + ((rectTransform.Width - newWidth) / 2);
+            //var newPositionY = rectTransform.Position.Y + ((rectTransform.Height - newHeight) / 2);
+
+            var newPositionX = rectTransform.Position.X + (centerX - newCenterX);
+            var newPositionY = rectTransform.Position.Y + (centerY - newCenterY);
 
             destinationRectangle = new Rectangle(
                 (int)newPositionX,
@@ -64,7 +73,6 @@ internal sealed class GemEntityRenderer
                 (int)newWidth,
                 (int)newHeight);
         }
-
         else
         {
             destinationRectangle = new Rectangle(
