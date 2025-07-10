@@ -27,4 +27,6 @@ internal static class Constants
     public const float GemFallSpeed = 500f;
 
     public const int MinimalGemsCountToMatch = 3;
+
+    public const float GemCollectAnimationDurationInSeconds = 0.5f;
 }

@@ -49,14 +49,17 @@ internal sealed class GemCollectSystem :
                 _playContext.SetPlayState(PlayState.WaitingForInput);
 
                 _startCollectMatchingGemsFinished = false;
-
-                return;
             }
         }
+        else
+        {
+            if (FinishCollectingGems())
+            {
+                _playContext.SetPlayState(PlayState.SpawningNewGems);
 
-        FinishCollectingGems();
-
-        _playContext.SetPlayState(PlayState.SpawningNewGems);
+                _startCollectMatchingGemsFinished = false;
+            }
+        }
     }
 
     private bool IsUpdateEnabled() =>
@@ -86,19 +89,23 @@ internal sealed class GemCollectSystem :
         return anyGemIsCollecting;
     }
 
-    private void FinishCollectingGems()
+    private bool FinishCollectingGems()
     {
+        var allGemsCollected = true;
+
         foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
             var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
-            if (!gemPlayBehavior.IsMatching)
+            if (!(gemPlayBehavior.IsMatching && gemPlayBehavior.IsCollecting))
             {
                 continue;
             }
 
-            if (gemPlayBehavior.IsCollected)
+            if (gemPlayBehavior.CollectAnimationProgress < 1f)
             {
+                allGemsCollected = false;
+
                 continue;
             }
 
@@ -116,5 +123,7 @@ internal sealed class GemCollectSystem :
 
             attachedGameBoardField.DetachGem();
         }
+
+        return allGemsCollected;
     }
 }
