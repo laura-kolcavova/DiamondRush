@@ -11,7 +11,8 @@ public class Scene : IScene
 
     public bool IsLoaded { get; private set; }
 
-    protected Scene(string name)
+    protected Scene(
+        string name)
     {
         Name = !string.IsNullOrEmpty(name)
             ? name
@@ -49,11 +50,13 @@ public class Scene : IScene
         IsLoaded = false;
     }
 
-    public virtual void Update(GameTime gameTime)
+    public virtual void Update(
+        GameTime gameTime)
     {
     }
 
-    public virtual void Draw(GameTime gameTime)
+    public virtual void Draw(
+        GameTime gameTime)
     {
     }
 
@@ -84,7 +87,8 @@ public class Scene : IScene
     {
     }
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual void Dispose(
+        bool disposing)
     {
         if (IsDisposed)
         {

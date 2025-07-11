@@ -1,7 +1,7 @@
 ﻿using DiamondRush.MonoGame.Core;
 using Microsoft.Xna.Framework;
 
-namespace DiamondRush.MonoGame.Play.Shared;
+namespace DiamondRush.MonoGame.Play.Extensions;
 
 internal static class GameBoardFieldExtensions
 {

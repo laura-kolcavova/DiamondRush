@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace DiamondRush.MonoGame.Core.Systems;
+namespace DiamondRush.MonoGame.Core.Systems.Abstractions;
 
 public interface IUpdateSystem :
     ISystem

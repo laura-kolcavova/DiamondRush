@@ -1,6 +1,6 @@
-﻿namespace DiamondRush.MonoGame.Play.Messages;
+﻿using DiamondRush.MonoGame.Core.Messages.Abstractions;
 
-public sealed record GemCollectingStartedMessage
-{
-    public const string Name = "GemCollectingStarted";
-}
+namespace DiamondRush.MonoGame.Play.Messages;
+
+internal sealed record GemCollectingStartedMessage :
+    IMessage;

@@ -1,6 +1,6 @@
 ﻿using DiamondRush.MonoGame.Core;
 using DiamondRush.MonoGame.Play.Components;
-using DiamondRush.MonoGame.Play.Shared;
+using DiamondRush.MonoGame.Play.Extensions;
 using LightECS;
 using Microsoft.Xna.Framework;
 

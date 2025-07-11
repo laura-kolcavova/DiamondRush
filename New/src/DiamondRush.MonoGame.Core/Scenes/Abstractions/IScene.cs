@@ -12,7 +12,9 @@ public interface IScene : IDisposable
 
     public void Unload();
 
-    public void Update(GameTime gameTime);
+    public void Update(
+        GameTime gameTime);
 
-    public void Draw(GameTime gameTime);
+    public void Draw(
+        GameTime gameTime);
 }

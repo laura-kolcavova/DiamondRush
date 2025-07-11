@@ -1,4 +1,5 @@
 ﻿using DiamondRush.MonoGame.Core;
+using DiamondRush.MonoGame.Core.Messages;
 using DiamondRush.MonoGame.Core.Scenes;
 using DiamondRush.MonoGame.Core.Services;
 using DiamondRush.MonoGame.Core.Systems;
@@ -32,6 +33,8 @@ internal sealed class PlayScene : Scene
 
     private readonly GameBoardEntityFactory _gameBoardEntityFactory;
 
+    private readonly Messenger _messenger;
+
     public PlayScene(
         IServiceProvider serviceProvider)
         : base("PlayScene")
@@ -58,6 +61,8 @@ internal sealed class PlayScene : Scene
         _gameBoardEntityFactory = new GameBoardEntityFactory(
             _playSceneContent,
             _graphicsDevice);
+
+        _messenger = new Messenger();
     }
 
     protected override void Initialize()
@@ -83,10 +88,6 @@ internal sealed class PlayScene : Scene
 
         playContext.SetPlayState(PlayState.SpawningNewGems);
 
-        _systemManager.AddSystem(new RenderSystem(
-            _entityContext,
-            _spriteBatch));
-
         _systemManager.AddSystem(new GemSpawnSystem(
             _entityContext,
             _playSceneContent,
@@ -102,22 +103,31 @@ internal sealed class PlayScene : Scene
 
         _systemManager.AddSystem(new GemCollectSystem(
             _entityContext,
+            _messenger,
             playContext));
 
-        _systemManager.AddSystem(new GemCollectAnimationSystem(
-           _entityContext));
+        _systemManager.AddSystem(new GemAnimationSystem(
+            _entityContext));
 
         _systemManager.AddSystem(new GemDestroySystem(
             _entityContext));
 
         _systemManager.AddSystem(new SoundEffectSystem(
-            _entityContext,
+            _messenger,
             _playSceneContent));
+
+        _systemManager.AddSystem(
+            new PlayerControlSystem(
+                _messenger,
+                playContext));
+
+        _systemManager.AddSystem(new RenderSystem(
+            _entityContext,
+            _spriteBatch));
 
         _systemManager.AddSystem(new DiagnosticSystem(
             _spriteBatch,
             _playSceneContent));
-
     }
 
     protected override void LoadContent()
@@ -153,6 +163,8 @@ internal sealed class PlayScene : Scene
     public override void Update(GameTime gameTime)
     {
         _systemManager.Update(gameTime);
+
+        _messenger.ClearMessages();
 
         base.Update(gameTime);
     }

@@ -1,4 +1,4 @@
-﻿using DiamondRush.MonoGame.Core.Systems;
+﻿using DiamondRush.MonoGame.Core.Systems.Abstractions;
 using DiamondRush.MonoGame.Play.Components;
 using LightECS.Abstractions;
 using Microsoft.Xna.Framework;

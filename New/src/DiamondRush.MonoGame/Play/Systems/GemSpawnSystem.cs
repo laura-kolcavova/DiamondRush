@@ -1,9 +1,9 @@
 ﻿using DiamondRush.MonoGame.Core;
-using DiamondRush.MonoGame.Core.Systems;
+using DiamondRush.MonoGame.Core.Systems.Abstractions;
 using DiamondRush.MonoGame.Play.Components;
 using DiamondRush.MonoGame.Play.Content.Abstractions;
+using DiamondRush.MonoGame.Play.Extensions;
 using DiamondRush.MonoGame.Play.Factories;
-using DiamondRush.MonoGame.Play.Shared;
 using LightECS;
 using LightECS.Abstractions;
 using Microsoft.Xna.Framework;

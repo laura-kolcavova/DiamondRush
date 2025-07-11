@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DiamondRush.MonoGame.Core.Systems.Abstractions;
+using Microsoft.Xna.Framework;
 
 namespace DiamondRush.MonoGame.Core.Systems;
 
-public sealed class SystemManager
+public sealed class SystemManager :
+    ISystemManager
 {
     private readonly List<IUpdateSystem> _updateSystems;
 
@@ -14,7 +16,8 @@ public sealed class SystemManager
         _drawSystems = [];
     }
 
-    public SystemManager AddSystem(ISystem system)
+    public SystemManager AddSystem(
+        ISystem system)
     {
         if (system is IUpdateSystem updateSystem)
         {
@@ -29,7 +32,8 @@ public sealed class SystemManager
         return this;
     }
 
-    public void Update(GameTime gameTime)
+    public void Update(
+        GameTime gameTime)
     {
         foreach (var system in _updateSystems)
         {
@@ -37,7 +41,8 @@ public sealed class SystemManager
         }
     }
 
-    public void Draw(GameTime gameTime)
+    public void Draw(
+        GameTime gameTime)
     {
         foreach (var system in _drawSystems)
         {

@@ -1,7 +1,7 @@
-﻿using DiamondRush.MonoGame.Core.Systems;
+﻿using DiamondRush.MonoGame.Core.Messages.Abstractions;
+using DiamondRush.MonoGame.Core.Systems.Abstractions;
 using DiamondRush.MonoGame.Play.Content.Abstractions;
 using DiamondRush.MonoGame.Play.Messages;
-using LightECS.Abstractions;
 using Microsoft.Xna.Framework;
 
 namespace DiamondRush.MonoGame.Play.Systems;
@@ -9,25 +9,26 @@ namespace DiamondRush.MonoGame.Play.Systems;
 internal sealed class SoundEffectSystem
     : IUpdateSystem
 {
-    private readonly IEntityContext _entityContext;
+    private readonly IMessenger _messenger;
 
     private readonly IPlaySceneContentProvider _playSceneContentProvider;
 
     public SoundEffectSystem(
-        IEntityContext entityContext,
+        IMessenger messenger,
         IPlaySceneContentProvider playSceneContentProvider)
     {
-        _entityContext = entityContext;
+        _messenger = messenger;
         _playSceneContentProvider = playSceneContentProvider;
     }
 
     public void Update(GameTime gameTime)
     {
-        if (_entityContext.State.Contains(GemCollectingStartedMessage.Name))
+        if (_messenger.TryReadMessage<GemCollectingStartedMessage>(
+            out var _))
         {
-            _playSceneContentProvider.GemCollectSoundEffect.Play();
-
-            _entityContext.State.Remove(GemCollectingStartedMessage.Name);
+            _playSceneContentProvider
+                .GemCollectSoundEffect
+                .Play();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DiamondRush.MonoGame.Play.Shared;
+﻿namespace DiamondRush.MonoGame.Play.Extensions;
 
 internal static class GameBoardFieldsExtensions
 {
