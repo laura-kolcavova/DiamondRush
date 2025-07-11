@@ -1,5 +1,5 @@
 ﻿using DiamondRush.MonoGame.Core;
-using DiamondRush.MonoGame.Core.Systems;
+using DiamondRush.MonoGame.Core.Systems.Abstractions;
 using DiamondRush.MonoGame.Play.Components;
 using DiamondRush.MonoGame.Play.Content.Abstractions;
 using DiamondRush.MonoGame.Play.Extensions;

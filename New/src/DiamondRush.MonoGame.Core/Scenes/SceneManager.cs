@@ -13,7 +13,8 @@ public sealed class SceneManager :
             ?? throw new InvalidOperationException("No active scene is set.");
     }
 
-    public void SetActiveScene(IScene scene)
+    public void SetActiveScene(
+        IScene scene)
     {
         if (!scene.IsLoaded)
         {
