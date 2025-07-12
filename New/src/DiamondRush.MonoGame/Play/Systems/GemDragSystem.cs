@@ -107,6 +107,9 @@ internal sealed class GemDragSystem
         {
             StopDraggingGem();
 
+            _messenger.SendMessage(
+                new GemSwappingStartedMessage());
+
             _playContext.SetPlayState(PlayState.SwappingGems);
         }
     }

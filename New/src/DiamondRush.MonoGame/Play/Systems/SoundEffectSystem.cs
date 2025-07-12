@@ -33,5 +33,15 @@ internal sealed class SoundEffectSystem
 
             _messenger.RemoveMessage<GemCollectingStartedMessage>();
         }
+
+        if (_messenger.TryReadMessage<GemSwappingStartedMessage>(
+            out var _))
+        {
+            _playSceneContentProvider
+                .GemPingSoundEffect
+                .Play();
+
+            _messenger.RemoveMessage<GemSwappingStartedMessage>();
+        }
     }
 }
