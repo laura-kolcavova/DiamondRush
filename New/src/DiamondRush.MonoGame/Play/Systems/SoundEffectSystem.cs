@@ -18,6 +18,7 @@ internal sealed class SoundEffectSystem
         IPlaySceneContentProvider playSceneContentProvider)
     {
         _messenger = messenger;
+
         _playSceneContentProvider = playSceneContentProvider;
     }
 
@@ -29,6 +30,8 @@ internal sealed class SoundEffectSystem
             _playSceneContentProvider
                 .GemCollectSoundEffect
                 .Play();
+
+            _messenger.RemoveMessage<GemCollectingStartedMessage>();
         }
     }
 }

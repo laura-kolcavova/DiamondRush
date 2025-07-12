@@ -1,14 +1,8 @@
-﻿using DiamondRush.MonoGame.Core;
-using DiamondRush.MonoGame.Core.Messages;
+﻿using DiamondRush.MonoGame.Core.Messages;
 using DiamondRush.MonoGame.Core.Scenes;
 using DiamondRush.MonoGame.Core.Services;
-using DiamondRush.MonoGame.Core.Systems;
-using DiamondRush.MonoGame.Play.Components;
 using DiamondRush.MonoGame.Play.Content;
-using DiamondRush.MonoGame.Play.Factories;
-using DiamondRush.MonoGame.Play.Systems;
 using DiamondRush.MonoGame.Shared.Assets;
-using LightECS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,21 +19,16 @@ internal sealed class PlayScene : Scene
 
     private readonly PlaySceneContent _playSceneContent;
 
-    private readonly EntityContext _entityContext;
-
-    private readonly SystemManager _systemManager;
-
-    private readonly BackgroundEntityFactory _backgroundEntityFactory;
-
-    private readonly GameBoardEntityFactory _gameBoardEntityFactory;
-
     private readonly Messenger _messenger;
+
+    private readonly PlayWorld _playWorld;
 
     public PlayScene(
         IServiceProvider serviceProvider)
-        : base("PlayScene")
+        : base(nameof(PlayScene))
     {
         _graphicsDevice = serviceProvider.GetRequiredService<GraphicsDevice>();
+
         _spriteBatch = serviceProvider.GetRequiredService<SpriteBatch>();
 
         _contentManager = new ContentManager(
@@ -50,84 +39,20 @@ internal sealed class PlayScene : Scene
             _contentManager,
             _graphicsDevice);
 
-        _entityContext = new EntityContext();
-
-        _systemManager = new SystemManager();
-
-        _backgroundEntityFactory = new BackgroundEntityFactory(
-            _playSceneContent,
-            _graphicsDevice);
-
-        _gameBoardEntityFactory = new GameBoardEntityFactory(
-            _playSceneContent,
-            _graphicsDevice);
-
         _messenger = new Messenger();
+
+        _playWorld = new PlayWorld(
+            _graphicsDevice,
+            _spriteBatch,
+            _messenger,
+            _playSceneContent);
     }
 
     protected override void Initialize()
     {
         base.Initialize();
 
-        _backgroundEntityFactory.Create(_entityContext);
-
-        var gameBoardEntity = _gameBoardEntityFactory.Create(
-            _entityContext,
-            Constants.GameBoardRows,
-            Constants.GameBoardColumns);
-
-        var gameBoard = _entityContext.Get<GameBoard>(gameBoardEntity);
-
-        var gameBoardRectTransform = _entityContext.Get<RectTransform>(gameBoardEntity);
-
-        var playContext = PlayContext.CreateDefault(
-            gameBoardEntity,
-            gameBoard);
-
-        playContext.ComputeGameBoardFieldPositions(gameBoardRectTransform);
-
-        playContext.SetPlayState(PlayState.SpawningNewGems);
-
-        _systemManager.AddSystem(new GemSpawnSystem(
-            _entityContext,
-            _playSceneContent,
-            playContext));
-
-        _systemManager.AddSystem(new GemFallSystem(
-            _entityContext,
-            playContext));
-
-        _systemManager.AddSystem(new GemMatchSystem(
-            _entityContext,
-            playContext));
-
-        _systemManager.AddSystem(new GemCollectSystem(
-            _entityContext,
-            _messenger,
-            playContext));
-
-        _systemManager.AddSystem(new GemAnimationSystem(
-            _entityContext));
-
-        _systemManager.AddSystem(new GemDestroySystem(
-            _entityContext));
-
-        _systemManager.AddSystem(new SoundEffectSystem(
-            _messenger,
-            _playSceneContent));
-
-        _systemManager.AddSystem(
-            new PlayerControlSystem(
-                _messenger,
-                playContext));
-
-        _systemManager.AddSystem(new RenderSystem(
-            _entityContext,
-            _spriteBatch));
-
-        _systemManager.AddSystem(new DiagnosticSystem(
-            _spriteBatch,
-            _playSceneContent));
+        _playWorld.Initialize();
     }
 
     protected override void LoadContent()
@@ -157,14 +82,12 @@ internal sealed class PlayScene : Scene
     {
         base.OnDisposed();
 
-        _systemManager.ClearSystems();
+        _playWorld.Clear();
     }
 
     public override void Update(GameTime gameTime)
     {
-        _systemManager.Update(gameTime);
-
-        _messenger.ClearMessages();
+        _playWorld.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -175,7 +98,7 @@ internal sealed class PlayScene : Scene
 
         _spriteBatch!.Begin();
 
-        _systemManager.Draw(gameTime);
+        _playWorld.Draw(gameTime);
 
         _spriteBatch.End();
 

@@ -6,18 +6,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace DiamondRush.MonoGame.Play.Systems;
 
-internal sealed class PlayerControlSystem :
+internal sealed class PlayerInputSystem :
     IUpdateSystem
 {
     private readonly IMessenger _messenger;
 
     private readonly PlayContext _playContext;
 
-    public PlayerControlSystem(
+    public PlayerInputSystem(
         IMessenger messenger,
         PlayContext playContext)
     {
         _messenger = messenger;
+
         _playContext = playContext;
     }
 
@@ -31,6 +32,11 @@ internal sealed class PlayerControlSystem :
     {
         if (!IsUpdateEnabled())
         {
+            if (_pressStarted)
+            {
+                ResetPressState();
+            }
+
             return;
         }
 

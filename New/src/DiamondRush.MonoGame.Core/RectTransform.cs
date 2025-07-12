@@ -19,12 +19,12 @@ public sealed record RectTransform
 
     public float Bottom => Position.Y + Height;
 
-    public bool IsInside(RectTransform rectTransform)
+    public bool Contains(RectTransform rectTransform)
     {
-        return rectTransform.Left <= Left
-            && rectTransform.Right >= Right
-            && rectTransform.Top <= Top
-            && rectTransform.Bottom >= Bottom;
+        return Left <= rectTransform.Left
+            && Right >= rectTransform.Right
+            && Top <= rectTransform.Top
+            && Bottom >= rectTransform.Bottom;
     }
 
     public RectTransform UpdatePosition(

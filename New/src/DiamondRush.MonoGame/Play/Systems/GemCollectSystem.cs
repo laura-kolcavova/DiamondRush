@@ -26,6 +26,7 @@ internal sealed class GemCollectSystem :
         PlayContext playContext)
     {
         _messenger = messenger;
+
         _playContext = playContext;
 
         _gemEntityView = entityContext

@@ -29,11 +29,13 @@ internal sealed class GemSpawnSystem :
         PlayContext playContext)
     {
         _entityContext = entityContext;
+
         _playContext = playContext;
 
         _gemEntityFactory = new GemEntityFactory(playSceneContentProvider);
 
         _rectTransformStore = _entityContext.UseStore<RectTransform>();
+
         _gemPlayBehaviorStore = _entityContext.UseStore<GemPlayBehavior>();
     }
 

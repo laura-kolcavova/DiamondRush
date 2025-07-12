@@ -35,6 +35,7 @@ internal sealed class GemFallSystem :
             .AsView();
 
         _rectTransformStore = entityContext.UseStore<RectTransform>();
+
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }
 
@@ -288,7 +289,7 @@ internal sealed class GemFallSystem :
 
         var gemRectTransform = _rectTransformStore.Get(gemEntity);
 
-        if (gemRectTransform.IsInside(gameBoardRectTransform))
+        if (gameBoardRectTransform.Contains(gemRectTransform))
         {
             _gemPlayBehaviorStore.Set(
                 gemEntity,

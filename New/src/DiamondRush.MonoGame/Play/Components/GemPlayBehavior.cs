@@ -24,6 +24,8 @@ internal sealed record GemPlayBehavior
 
     public float CollectAnimationProgress { get; init; } = 0f;
 
+    public bool IsSwapping { get; private set; } = false;
+
     public GemPlayBehavior StartFallingToGameBoardField(
         int rowIndex,
         int columnIndex)
@@ -95,6 +97,18 @@ internal sealed record GemPlayBehavior
                 progress,
                 0f,
                 1f),
+        };
+    }
+
+    public GemPlayBehavior StartSwapping(
+        int targetRowIndex,
+        int targetColumnIndex)
+    {
+        return this with
+        {
+            IsSwapping = true,
+            TargetRowIndex = targetRowIndex,
+            TargetColumnIndex = targetColumnIndex,
         };
     }
 }
