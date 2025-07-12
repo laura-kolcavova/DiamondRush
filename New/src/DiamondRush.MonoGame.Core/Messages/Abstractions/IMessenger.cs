@@ -20,5 +20,8 @@ public interface IMessenger
         [MaybeNullWhen(false)] out TMessage message)
         where TMessage : IMessage;
 
-    public void ClearMessages();
+    public bool RemoveMessage(
+        string messageName);
+
+    public bool RemoveMessage<TMessage>();
 }

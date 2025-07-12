@@ -13,9 +13,17 @@ public sealed class Messenger :
         _messagesByName = [];
     }
 
-    public void ClearMessages()
+    public bool RemoveMessage(string messageName)
     {
-        _messagesByName.Clear();
+        return _messagesByName.Remove(messageName);
+    }
+
+    public bool RemoveMessage<TMessage>()
+    {
+        var messageName = typeof(TMessage)
+            .Name;
+
+        return RemoveMessage(messageName);
     }
 
     public void SendMessage(

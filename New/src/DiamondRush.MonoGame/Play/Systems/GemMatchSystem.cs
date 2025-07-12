@@ -21,6 +21,7 @@ internal sealed class GemMatchSystem :
         _playContext = playContext;
 
         _gemStore = entityContext.UseStore<Gem>();
+
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }
 
@@ -99,7 +100,7 @@ internal sealed class GemMatchSystem :
                 if (TryMarkMatchingGems(
                     gameBoardFields,
                     matchingGemsCount,
-                    gameBoardFieldIndex))
+                    gameBoardFieldIndex - 1))
                 {
                     anyMatchingGemsFound = true;
                 }
@@ -125,7 +126,7 @@ internal sealed class GemMatchSystem :
                 if (TryMarkMatchingGems(
                     gameBoardFields,
                     matchingGemsCount,
-                    gameBoardFieldIndex))
+                    gameBoardFieldIndex - 1))
                 {
                     anyMatchingGemsFound = true;
                 }
