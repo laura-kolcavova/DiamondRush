@@ -11,11 +11,9 @@ namespace DiamondRush.MonoGame.Play.Systems;
 internal sealed class GemSwapSystem :
     IUpdateSystem
 {
-    private readonly IEntityContext _entityContext;
+    private readonly PlayContext _playContext;
 
     private readonly IEntityView _gemEntityView;
-
-    private readonly PlayContext _playContext;
 
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
@@ -23,14 +21,12 @@ internal sealed class GemSwapSystem :
 
     public GemSwapSystem(
         IEntityContext entityContext,
-        IEntityView gemEntityView,
-        PlayContext playContext)
+        PlayContext playContext,
+        IEntityView gemEntityView)
     {
-        _entityContext = entityContext;
+        _playContext = playContext;
 
         _gemEntityView = gemEntityView;
-
-        _playContext = playContext;
 
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
 
@@ -73,11 +69,10 @@ internal sealed class GemSwapSystem :
                 continue;
             }
 
-            targetGameBoardField.AttachGem(gemEntity);
-
-            _gemPlayBehaviorStore.Set(
+            FinishGemSwapping(
                 gemEntity,
-                gemPlayBehavior.FinishSwapping());
+                gemPlayBehavior,
+                targetGameBoardField);
         }
 
         if (allGemsSwapped)
@@ -110,5 +105,17 @@ internal sealed class GemSwapSystem :
             gemRectTransform.UpdatePosition(newGemPosition));
 
         return newGemPosition == targetGameBoardFieldPosition;
+    }
+
+    private void FinishGemSwapping(
+        Entity gemEntity,
+        GemPlayBehavior gemPlayBehavior,
+        GameBoardField targetGameBoardField)
+    {
+        targetGameBoardField.AttachGem(gemEntity);
+
+        _gemPlayBehaviorStore.Set(
+            gemEntity,
+            gemPlayBehavior.FinishSwapping());
     }
 }

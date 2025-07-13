@@ -118,8 +118,8 @@ internal sealed class PlayWorld
         _systemManager.AddSystem(
             new GemSwapSystem(
                 _entityContext,
-                gemEntityView,
-                playContext));
+                playContext,
+                gemEntityView));
 
         _systemManager.AddSystem(
             new GemAnimationSystem(
@@ -135,8 +135,6 @@ internal sealed class PlayWorld
             new SoundEffectSystem(
                 _messenger,
                 _playSceneContentProvider));
-
-
 
         _systemManager.AddSystem(
             new RenderSystem(
