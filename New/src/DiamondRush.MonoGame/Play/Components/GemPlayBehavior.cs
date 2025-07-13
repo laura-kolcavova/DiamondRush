@@ -26,27 +26,27 @@ internal sealed record GemPlayBehavior
 
     public bool IsSwapping { get; private set; } = false;
 
-    public GemPlayBehavior StartFallingToGameBoardField(
-        int rowIndex,
-        int columnIndex)
+    public GemPlayBehavior StartFalling(
+        int targetRowIndex,
+        int targetColumnIndex)
     {
         return this with
         {
-            TargetRowIndex = rowIndex,
-            TargetColumnIndex = columnIndex,
             IsFalling = true,
+            TargetRowIndex = targetRowIndex,
+            TargetColumnIndex = targetColumnIndex,
         };
     }
 
-    public GemPlayBehavior FinishFallingToGameBoardField()
+    public GemPlayBehavior FinishFalling()
     {
         return this with
         {
+            IsFalling = false,
             AttachedToRowIndex = TargetRowIndex,
             AttachedColumnIndex = TargetColumnIndex,
             TargetRowIndex = -1,
             TargetColumnIndex = -1,
-            IsFalling = false,
         };
     }
 
@@ -80,11 +80,11 @@ internal sealed record GemPlayBehavior
     {
         return this with
         {
-            AttachedToRowIndex = -1,
-            AttachedColumnIndex = -1,
             IsCollecting = false,
             IsCollected = true,
             CollectAnimationEnabled = false,
+            AttachedToRowIndex = -1,
+            AttachedColumnIndex = -1,
         };
     }
 
@@ -109,6 +109,18 @@ internal sealed record GemPlayBehavior
             IsSwapping = true,
             TargetRowIndex = targetRowIndex,
             TargetColumnIndex = targetColumnIndex,
+        };
+    }
+
+    public GemPlayBehavior FinishSwapping()
+    {
+        return this with
+        {
+            IsSwapping = false,
+            AttachedToRowIndex = TargetRowIndex,
+            AttachedColumnIndex = TargetColumnIndex,
+            TargetRowIndex = -1,
+            TargetColumnIndex = -1,
         };
     }
 }

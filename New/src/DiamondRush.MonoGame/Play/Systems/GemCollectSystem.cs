@@ -23,17 +23,14 @@ internal sealed class GemCollectSystem :
     public GemCollectSystem(
         IEntityContext entityContext,
         IMessenger messenger,
-        PlayContext playContext)
+        PlayContext playContext,
+        IEntityView gemEntityView)
     {
         _messenger = messenger;
 
         _playContext = playContext;
 
-        _gemEntityView = entityContext
-            .UseQuery()
-            .With<Gem>()
-            .With<GemPlayBehavior>()
-            .AsView();
+        _gemEntityView = gemEntityView;
 
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }

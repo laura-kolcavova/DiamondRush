@@ -20,13 +20,15 @@ internal static class Constants
 
     public const int GameBoardBorderWidth = 3;
 
+    public const int MinimalGemsCountToMatch = 3;
+
     public const int GemWidth = 64;
 
     public const int GemHeight = 64;
 
     public const float GemFallSpeed = 500f;
 
-    public const int MinimalGemsCountToMatch = 3;
+    public const float GemSwapSpeed = 250f;
 
     public const float GemCollectAnimationDurationInSeconds = 0.5f;
 }

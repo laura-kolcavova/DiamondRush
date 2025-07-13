@@ -234,6 +234,8 @@ internal sealed class GemDragSystem
                 targetRowIndex,
                 targetColumnIndex));
 
+        _draggingStartGameBoardField!.DetachGem();
+
         var targetGemEntity = targetGameBoardField.GemEntity;
 
         var targetGemPlayBehavior = _gemPlayBehaviorStore.Get(
@@ -244,6 +246,8 @@ internal sealed class GemDragSystem
             targetGemPlayBehavior.StartSwapping(
                 _draggingStartGameBoardField!.RowIndex,
                 _draggingStartGameBoardField!.ColumnIndex));
+
+        targetGameBoardField!.DetachGem();
 
         return true;
     }

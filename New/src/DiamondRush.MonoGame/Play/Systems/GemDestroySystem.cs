@@ -15,15 +15,12 @@ internal sealed class GemDestroySystem :
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
     public GemDestroySystem(
-        IEntityContext entityContext)
+        IEntityContext entityContext,
+        IEntityView gemEntityView)
     {
         _entityContext = entityContext;
 
-        _gemEntityView = entityContext
-            .UseQuery()
-            .With<Gem>()
-            .With<GemPlayBehavior>()
-            .AsView();
+        _gemEntityView = gemEntityView;
 
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }

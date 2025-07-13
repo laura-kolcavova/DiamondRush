@@ -23,16 +23,12 @@ internal sealed class GemFallSystem :
 
     public GemFallSystem(
         IEntityContext entityContext,
-        PlayContext playContext)
+        PlayContext playContext,
+        IEntityView gemEntityView)
     {
         _playContext = playContext;
 
-        _gemEntityView = entityContext
-            .UseQuery()
-            .With<Gem>()
-            .With<RectTransform>()
-            .With<GemPlayBehavior>()
-            .AsView();
+        _gemEntityView = gemEntityView;
 
         _rectTransformStore = entityContext.UseStore<RectTransform>();
 
@@ -205,7 +201,7 @@ internal sealed class GemFallSystem :
 
         _gemPlayBehaviorStore.Set(
             gemEntity,
-            gemPlayBehavior.StartFallingToGameBoardField(
+            gemPlayBehavior.StartFalling(
                 targetRowIndex,
                 targetColumnIndex));
     }
@@ -316,7 +312,7 @@ internal sealed class GemFallSystem :
 
         _gemPlayBehaviorStore.Set(
             gemEntity,
-            gemPlayBehavior.FinishFallingToGameBoardField());
+            gemPlayBehavior.FinishFalling());
 
         return true;
     }
