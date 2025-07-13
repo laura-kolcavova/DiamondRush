@@ -22,6 +22,8 @@ internal sealed class PlayerInputSystem :
         _playContext = playContext;
     }
 
+    private bool _pressEnabled = true;
+
     private bool _pressStarted = false;
 
     private Vector2 _pressStartPosition = Vector2.Zero;
@@ -34,7 +36,7 @@ internal sealed class PlayerInputSystem :
         {
             if (_pressStarted)
             {
-                ResetPressState();
+                _pressEnabled = false;
             }
 
             return;
@@ -42,11 +44,14 @@ internal sealed class PlayerInputSystem :
 
         var mouseState = Mouse.GetState();
 
-        HandlePressStarted(mouseState);
-
-        HandlePressMove(mouseState);
-
         HandlePressReleased(mouseState);
+
+        if (_pressEnabled)
+        {
+            HandlePressStarted(mouseState);
+
+            HandlePressMove(mouseState);
+        }
     }
 
     private bool IsUpdateEnabled() =>
@@ -131,6 +136,7 @@ internal sealed class PlayerInputSystem :
 
     private void ResetPressState()
     {
+        _pressEnabled = true;
         _pressStarted = false;
         _pressStartPosition = Vector2.Zero;
         _pressMovePosition = Vector2.Zero;

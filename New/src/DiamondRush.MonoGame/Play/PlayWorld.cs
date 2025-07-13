@@ -73,6 +73,18 @@ internal sealed class PlayWorld
 
         playContext.SetPlayState(PlayState.SpawningNewGems);
 
+        var gemEntityView = _entityContext
+            .UseQuery()
+            .With<Gem>()
+            .With<RectTransform>()
+            .With<GemPlayBehavior>()
+            .AsView();
+
+        _systemManager.AddSystem(
+           new PlayerInputSystem(
+               _messenger,
+               playContext));
+
         _systemManager.AddSystem(
             new GemSpawnSystem(
                 _entityContext,
@@ -82,7 +94,8 @@ internal sealed class PlayWorld
         _systemManager.AddSystem(
             new GemFallSystem(
                 _entityContext,
-                playContext));
+                playContext,
+                gemEntityView));
 
         _systemManager.AddSystem(
             new GemMatchSystem(
@@ -93,7 +106,8 @@ internal sealed class PlayWorld
             new GemCollectSystem(
                 _entityContext,
                 _messenger,
-                playContext));
+                playContext,
+                gemEntityView));
 
         _systemManager.AddSystem(
             new GemDragSystem(
@@ -102,22 +116,25 @@ internal sealed class PlayWorld
                 playContext));
 
         _systemManager.AddSystem(
+            new GemSwapSystem(
+                _entityContext,
+                playContext,
+                gemEntityView));
+
+        _systemManager.AddSystem(
             new GemAnimationSystem(
-                _entityContext));
+                _entityContext,
+                gemEntityView));
 
         _systemManager.AddSystem(
             new GemDestroySystem(
-                _entityContext));
+                _entityContext,
+                gemEntityView));
 
         _systemManager.AddSystem(
             new SoundEffectSystem(
                 _messenger,
                 _playSceneContentProvider));
-
-        _systemManager.AddSystem(
-            new PlayerInputSystem(
-                _messenger,
-                playContext));
 
         _systemManager.AddSystem(
             new RenderSystem(

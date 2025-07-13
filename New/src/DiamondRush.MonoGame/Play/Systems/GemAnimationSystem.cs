@@ -13,13 +13,10 @@ internal sealed class GemAnimationSystem
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
     public GemAnimationSystem(
-        IEntityContext entityContext)
+        IEntityContext entityContext,
+        IEntityView gemEntityView)
     {
-        _gemEntityView = entityContext
-            .UseQuery()
-            .With<Gem>()
-            .With<GemPlayBehavior>()
-            .AsView();
+        _gemEntityView = gemEntityView;
 
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }
