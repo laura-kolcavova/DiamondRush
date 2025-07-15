@@ -125,8 +125,8 @@ internal sealed class GemCollectSystem :
             var attachedGameBoardField = _playContext
                 .GameBoardFields
                 .GetField(
-                    gemPlayBehavior.AttachedToRowIndex,
-                    gemPlayBehavior.AttachedColumnIndex);
+                    gemPlayBehavior.CurrentRowIndex,
+                    gemPlayBehavior.CurrentColumnIndex);
 
             attachedGameBoardField.DetachGem();
         }

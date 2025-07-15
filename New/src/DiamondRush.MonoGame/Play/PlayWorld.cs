@@ -100,7 +100,8 @@ internal sealed class PlayWorld
         _systemManager.AddSystem(
             new GemMatchSystem(
                 _entityContext,
-                playContext));
+                playContext,
+                gemEntityView));
 
         _systemManager.AddSystem(
             new GemCollectSystem(
@@ -120,6 +121,12 @@ internal sealed class PlayWorld
                 _entityContext,
                 playContext,
                 gemEntityView));
+
+        _systemManager.AddSystem(
+            new GemSwapBackSystem(
+               _entityContext,
+               playContext,
+               gemEntityView));
 
         _systemManager.AddSystem(
             new GemAnimationSystem(
