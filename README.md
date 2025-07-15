@@ -4,6 +4,8 @@
 
 DiamondRush is a match-3 puzzle game built with [MonoGame](https://www.monogame.net/) and a custom ECS (Entity Component System) architecture. The project demonstrates modern C# 12 features and targets .NET 8.
 
+**Play it here:** [https://tonedeafsiren.itch.io/diamond-rush](https://tonedeafsiren.itch.io/diamond-rush)
+
 ## Features
 
 - **Match-3 Gameplay:** Swap gems to create matches and collect them.
