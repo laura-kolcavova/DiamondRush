@@ -97,7 +97,7 @@ internal sealed class GemSwapSystem :
             .Position
             .MoveTowards(
                 targetGameBoardFieldPosition,
-                Constants.GemFallSpeed * deltaTime);
+                Constants.Gem.SwapSpeed * deltaTime);
 
         _rectTransformStore.Set(
             gemEntity,

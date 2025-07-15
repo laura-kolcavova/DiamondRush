@@ -4,22 +4,22 @@ internal static class AssetNames
 {
     public const string RootDirectory = "Content";
 
-    internal static class Images
+    public static class Images
     {
         public const string Background = "Images/background";
     }
 
-    internal static class SpriteSheets
+    public static class SpriteSheets
     {
         public const string Gems = "SpriteSheets/gems";
     }
 
-    internal static class Fonts
+    public static class Fonts
     {
         public const string DefaultFont = "Fonts/DefaultFont";
     }
 
-    internal static class Sfx
+    public static class Sfx
     {
         public const string GemPing = "Sfx/gem_ping";
 

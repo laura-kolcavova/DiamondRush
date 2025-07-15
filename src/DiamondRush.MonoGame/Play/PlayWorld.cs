@@ -58,8 +58,8 @@ internal sealed class PlayWorld
 
         var gameBoardEntity = gameBoardEntityFactory.Create(
             _entityContext,
-            Constants.GameBoardRows,
-            Constants.GameBoardColumns);
+            Constants.GameBoard.RowCount,
+            Constants.GameBoard.ColumnCount);
 
         var gameBoard = _entityContext.Get<GameBoard>(gameBoardEntity);
 

@@ -46,29 +46,32 @@ internal sealed class GameBoardEntityFactory
             {
                 TextureRegion = new TextureRegion(
                     _playSceneContentProvider.BlankTexture),
-                Color = Constants.GameBoardColor,
+                Color = Constants.GameBoard.FieldColor,
+                LayerDepth = Constants.LayerDepth.GameBoardField,
             },
 
             BorderSprite = new Sprite
             {
                 TextureRegion = new TextureRegion(
                     _playSceneContentProvider.BlankTexture),
-                Color = Constants.GameBoardBorderColor,
+                Color = Constants.GameBoard.BorderColor,
+                LayerDepth = Constants.LayerDepth.GameBoardBorder,
             },
 
             SpacingSprite = new Sprite
             {
                 TextureRegion = new TextureRegion(
                     _playSceneContentProvider.BlankTexture),
-                Color = Constants.GameBoardSpacingColor,
+                Color = Constants.GameBoard.SpacingColor,
+                LayerDepth = Constants.LayerDepth.GameBoardSpacing,
             }
         };
 
-        var spacingWidthSum = (columns - 1) * Constants.GameBoardSpacingWidth;
-        var spacingHeightSum = (rows - 1) * Constants.GameBoardSpacingWidth;
+        var spacingWidthSum = (columns - 1) * Constants.GameBoard.SpacingWidth;
+        var spacingHeightSum = (rows - 1) * Constants.GameBoard.SpacingWidth;
 
-        var width = columns * Constants.GameBoardFieldSize + spacingWidthSum;
-        var height = rows * Constants.GameBoardFieldSize + spacingHeightSum;
+        var width = columns * Constants.GameBoard.FieldSize + spacingWidthSum;
+        var height = rows * Constants.GameBoard.FieldSize + spacingHeightSum;
 
         var rectTransform = new RectTransform
         {

@@ -82,6 +82,14 @@ internal sealed class GemEntityRenderer
                 (int)rectTransform.Height);
         }
 
+        if (gemPlayBehavior.IsSwappingMaster)
+        {
+            sprite = sprite with
+            {
+                LayerDepth = Constants.LayerDepth.SwappingMasterGem
+            };
+        }
+
         _spriteBatch.DrawSprite(
             sprite,
             destinationRectangle);

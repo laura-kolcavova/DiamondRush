@@ -102,7 +102,7 @@ internal sealed class GemSpawnSystem :
 
         var gemPosition = new Vector2(
             gameBoardFieldPosition.X,
-            gameBoardRectTransform.Top - Constants.GameBoardFieldSize * stackCount);
+            gameBoardRectTransform.Top - Constants.GameBoard.FieldSize * stackCount);
 
         var gemRectTransform = _rectTransformStore.Get(gemEntity);
 

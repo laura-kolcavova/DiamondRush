@@ -202,7 +202,7 @@ internal sealed class GemMatchSystem :
         int matchingGemsCount,
         int lastIndex)
     {
-        if (matchingGemsCount >= Constants.MinimalGemsCountToMatch)
+        if (matchingGemsCount >= Constants.Gem.MinimalGemsCountToMatch)
         {
             MarkMatchingGems(
                 gameBoardFields,

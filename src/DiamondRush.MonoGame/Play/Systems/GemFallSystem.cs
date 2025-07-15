@@ -260,7 +260,7 @@ internal sealed class GemFallSystem :
 
         var newGemPosition = gemRectTransform.Position.MoveTowards(
             targetGameBoardFieldPosition,
-            Constants.GemFallSpeed * deltaTime);
+            Constants.Gem.FallSpeed * deltaTime);
 
         var newGemRectTransform = gemRectTransform.UpdatePosition(
             newGemPosition);

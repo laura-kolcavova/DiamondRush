@@ -42,12 +42,13 @@ internal sealed class GemEntityFactory
         var sprite = new Sprite
         {
             TextureRegion = _textureAtlas.GetTextureRegion(textureRegionName),
+            LayerDepth = Constants.LayerDepth.Gem,
         };
 
         var rectTransform = new RectTransform
         {
-            Width = Constants.GemWidth,
-            Height = Constants.GemHeight,
+            Width = Constants.Gem.Width,
+            Height = Constants.Gem.Height,
         };
 
         entityContext.Set(entity, identity);

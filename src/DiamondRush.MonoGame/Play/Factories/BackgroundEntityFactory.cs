@@ -36,7 +36,8 @@ internal sealed class BackgroundEntityFactory
         var sprite = new Sprite
         {
             TextureRegion = new TextureRegion(
-                _playSceneContentProvider.BackgroundTexture)
+                _playSceneContentProvider.BackgroundTexture),
+            LayerDepth = Constants.LayerDepth.Background,
         };
 
         var rectTransform = new RectTransform
