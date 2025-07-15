@@ -66,14 +66,14 @@ internal sealed class GameBoardEntityRenderer
     {
         foreach (var rowIndex in Enumerable.Range(1, gameBoard.Rows - 1))
         {
-            var rowPositionY = rowIndex * Constants.GameBoardFieldSize
-                + (rowIndex - 1) * Constants.GameBoardSpacingWidth;
+            var rowPositionY = rowIndex * Constants.GameBoard.FieldSize
+                + (rowIndex - 1) * Constants.GameBoard.SpacingWidth;
 
             var rowDestinationRectangle = new Rectangle(
                 (int)rectTransform.Position.X,
                 (int)rectTransform.Position.Y + rowPositionY,
                 (int)rectTransform.Width,
-                Constants.GameBoardSpacingWidth);
+                Constants.GameBoard.SpacingWidth);
 
             _spriteBatch.DrawSprite(
                 gameBoardStyles.SpacingSprite,
@@ -82,13 +82,13 @@ internal sealed class GameBoardEntityRenderer
 
         foreach (var colIndex in Enumerable.Range(1, gameBoard.Columns - 1))
         {
-            var colPositionX = colIndex * Constants.GameBoardFieldSize
-                + (colIndex - 1) * Constants.GameBoardSpacingWidth;
+            var colPositionX = colIndex * Constants.GameBoard.FieldSize
+                + (colIndex - 1) * Constants.GameBoard.SpacingWidth;
 
             var colDestinationRectangle = new Rectangle(
                 (int)rectTransform.Position.X + colPositionX,
                 (int)rectTransform.Position.Y,
-                Constants.GameBoardSpacingWidth,
+                Constants.GameBoard.SpacingWidth,
                 (int)rectTransform.Height);
 
             _spriteBatch.DrawSprite(
@@ -102,10 +102,10 @@ internal sealed class GameBoardEntityRenderer
         RectTransform rectTransform)
     {
         var leftBorderDestinationRectangle = new Rectangle(
-            (int)rectTransform.Position.X - Constants.GameBoardBorderWidth,
-            (int)rectTransform.Position.Y - Constants.GameBoardBorderWidth,
-            Constants.GameBoardBorderWidth,
-            (int)rectTransform.Height + Constants.GameBoardBorderWidth);
+            (int)rectTransform.Position.X - Constants.GameBoard.BorderWidth,
+            (int)rectTransform.Position.Y - Constants.GameBoard.BorderWidth,
+            Constants.GameBoard.BorderWidth,
+            (int)rectTransform.Height + Constants.GameBoard.BorderWidth);
 
         _spriteBatch.DrawSprite(
             gameBoardStyles.BorderSprite,
@@ -113,9 +113,9 @@ internal sealed class GameBoardEntityRenderer
 
         var topBorderDestinationRectangle = new Rectangle(
             (int)rectTransform.Position.X,
-            (int)rectTransform.Position.Y - Constants.GameBoardBorderWidth,
-            (int)rectTransform.Width + Constants.GameBoardBorderWidth,
-            Constants.GameBoardBorderWidth);
+            (int)rectTransform.Position.Y - Constants.GameBoard.BorderWidth,
+            (int)rectTransform.Width + Constants.GameBoard.BorderWidth,
+            Constants.GameBoard.BorderWidth);
 
         _spriteBatch.DrawSprite(
             gameBoardStyles.BorderSprite,
@@ -124,18 +124,18 @@ internal sealed class GameBoardEntityRenderer
         var rightBorderDestinationRectangle = new Rectangle(
             (int)(rectTransform.Position.X + rectTransform.Width),
             (int)rectTransform.Position.Y,
-            Constants.GameBoardBorderWidth,
-            (int)rectTransform.Height + Constants.GameBoardBorderWidth);
+            Constants.GameBoard.BorderWidth,
+            (int)rectTransform.Height + Constants.GameBoard.BorderWidth);
 
         _spriteBatch.DrawSprite(
             gameBoardStyles.BorderSprite,
             rightBorderDestinationRectangle);
 
         var bottomBorderDestinationRectangle = new Rectangle(
-            (int)rectTransform.Position.X - Constants.GameBoardBorderWidth,
+            (int)rectTransform.Position.X - Constants.GameBoard.BorderWidth,
             (int)(rectTransform.Position.Y + rectTransform.Height),
-            (int)rectTransform.Width + Constants.GameBoardBorderWidth,
-            Constants.GameBoardBorderWidth);
+            (int)rectTransform.Width + Constants.GameBoard.BorderWidth,
+            Constants.GameBoard.BorderWidth);
 
         _spriteBatch.DrawSprite(
             gameBoardStyles.BorderSprite,

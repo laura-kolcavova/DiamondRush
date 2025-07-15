@@ -10,10 +10,10 @@ internal static class GameBoardFieldExtensions
         RectTransform gameBoardRectTransform)
     {
         var gameBoardFieldPositionX = gameBoardField.ColumnIndex
-            * (Constants.GameBoardFieldSize + Constants.GameBoardSpacingWidth);
+            * (Constants.GameBoard.FieldSize + Constants.GameBoard.SpacingWidth);
 
         var gameBoardFieldPositionY = gameBoardField.RowIndex
-            * (Constants.GameBoardFieldSize + Constants.GameBoardSpacingWidth);
+            * (Constants.GameBoard.FieldSize + Constants.GameBoard.SpacingWidth);
 
         return new Vector2(
             gameBoardRectTransform.Position.X + gameBoardFieldPositionX,

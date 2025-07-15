@@ -30,6 +30,8 @@ internal sealed record GemPlayBehavior
 
     public bool IsSwapping { get; private set; } = false;
 
+    public bool IsSwappingMaster { get; init; } = false;
+
     public bool IsSwapped { get; private set; } = false;
 
     public bool IsSwappingBack { get; private set; } = false;
@@ -112,11 +114,13 @@ internal sealed record GemPlayBehavior
 
     public GemPlayBehavior StartSwapping(
         int targetRowIndex,
-        int targetColumnIndex)
+        int targetColumnIndex,
+        bool isSwappingMaster = false)
     {
         return this with
         {
             IsSwapping = true,
+            IsSwappingMaster = isSwappingMaster,
             TargetRowIndex = targetRowIndex,
             TargetColumnIndex = targetColumnIndex,
         };
@@ -141,6 +145,7 @@ internal sealed record GemPlayBehavior
         {
             IsSwapping = false,
             IsSwapped = false,
+            IsSwappingMaster = false,
             OriginalRowIndex = CurrentRowIndex,
             OriginalColumnIndex = CurrentColumnIndex,
         };
@@ -160,6 +165,7 @@ internal sealed record GemPlayBehavior
         {
             IsSwappingBack = false,
             IsSwapped = false,
+            IsSwappingMaster = false,
             CurrentRowIndex = OriginalRowIndex,
             CurrentColumnIndex = OriginalColumnIndex,
         };

@@ -130,8 +130,8 @@ internal sealed class GemDragSystem
             var gameBoardFieldRect = new RectangleF(
                 gameBoardFieldPosition.X,
                 gameBoardFieldPosition.Y,
-                Constants.GameBoardFieldSize,
-                Constants.GameBoardFieldSize);
+                Constants.GameBoard.FieldSize,
+                Constants.GameBoard.FieldSize);
 
             if (!gameBoardFieldRect.Contains(
                 pressStartPosition.X,
@@ -167,8 +167,8 @@ internal sealed class GemDragSystem
         var gameBoardFieldRect = new RectangleF(
             gameBoardFieldPosition.X,
             gameBoardFieldPosition.Y,
-            Constants.GameBoardFieldSize,
-            Constants.GameBoardFieldSize);
+            Constants.GameBoard.FieldSize,
+            Constants.GameBoard.FieldSize);
 
         var isSwapping = false;
 
@@ -232,7 +232,8 @@ internal sealed class GemDragSystem
             _draggingGemEntity!.Value,
             draggingGemPlayBehavior.StartSwapping(
                 targetRowIndex,
-                targetColumnIndex));
+                targetColumnIndex,
+                isSwappingMaster: true));
 
         _draggingStartGameBoardField!.DetachGem();
 

@@ -96,7 +96,13 @@ internal sealed class PlayScene : Scene
     {
         _graphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch!.Begin();
+        //_spriteBatch.Begin(
+        //    samplerState: SamplerState.PointClamp,
+        //    sortMode: SpriteSortMode.FrontToBack,
+        //    blendState: BlendState.AlphaBlend);
+
+        _spriteBatch.Begin(
+            sortMode: SpriteSortMode.FrontToBack);
 
         _playWorld.Draw(gameTime);
 
