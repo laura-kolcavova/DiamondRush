@@ -12,15 +12,20 @@ internal sealed class GemMatchSystem :
 
     private readonly IComponentStore<Gem> _gemStore;
 
+    private readonly IEntityView _gemEntityView;
+
     private readonly IComponentStore<GemPlayBehavior> _gemPlayBehaviorStore;
 
     public GemMatchSystem(
         IEntityContext entityContext,
-        PlayContext playContext)
+        PlayContext playContext,
+        IEntityView entityView)
     {
         _playContext = playContext;
 
         _gemStore = entityContext.UseStore<Gem>();
+
+        _gemEntityView = entityView;
 
         _gemPlayBehaviorStore = entityContext.UseStore<GemPlayBehavior>();
     }
@@ -32,9 +37,47 @@ internal sealed class GemMatchSystem :
             return;
         }
 
-        if (TrySearchForMatchingGems())
+        var anyGemIsMatching = TrySearchForMatchingGems();
+
+        if (anyGemIsMatching)
         {
+            foreach (var gemEntity in _gemEntityView.AsEnumerable())
+            {
+                var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
+
+                if (gemPlayBehavior.IsSwapped)
+                {
+                    _gemPlayBehaviorStore.Set(
+                        gemEntity,
+                        gemPlayBehavior.ConfirmSwappedPosition());
+                }
+            }
+
             _playContext.SetPlayState(PlayState.CollectingGems);
+        }
+        else if (_playContext.PreviousPlayState == PlayState.SwappingGems)
+        {
+            foreach (var gemEntity in _gemEntityView.AsEnumerable())
+            {
+                var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
+
+                if (gemPlayBehavior.IsSwapped)
+                {
+                    var currentGameBoardField = _playContext
+                       .GameBoardFields
+                       .GetField(
+                           gemPlayBehavior.CurrentRowIndex,
+                           gemPlayBehavior.CurrentColumnIndex);
+
+                    currentGameBoardField.DetachGem();
+
+                    _gemPlayBehaviorStore.Set(
+                        gemEntity,
+                        gemPlayBehavior.StartSwappingBack());
+                }
+            }
+
+            _playContext.SetPlayState(PlayState.SwappingGemsBack);
         }
         else
         {

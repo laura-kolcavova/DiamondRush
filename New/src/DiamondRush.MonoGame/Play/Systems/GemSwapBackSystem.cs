@@ -6,10 +6,11 @@ using LightECS;
 using LightECS.Abstractions;
 using Microsoft.Xna.Framework;
 
+
 namespace DiamondRush.MonoGame.Play.Systems;
 
-internal sealed class GemSwapSystem :
-    IUpdateSystem
+internal sealed class GemSwapBackSystem
+    : IUpdateSystem
 {
     private readonly PlayContext _playContext;
 
@@ -19,7 +20,7 @@ internal sealed class GemSwapSystem :
 
     private readonly IComponentStore<RectTransform> _rectTransformStore;
 
-    public GemSwapSystem(
+    public GemSwapBackSystem(
         IEntityContext entityContext,
         PlayContext playContext,
         IEntityView gemEntityView)
@@ -42,80 +43,81 @@ internal sealed class GemSwapSystem :
 
         var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        var allGemsSwapped = true;
+        var allGemsSwappedBack = true;
 
         foreach (var gemEntity in _gemEntityView.AsEnumerable())
         {
             var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
-            if (!gemPlayBehavior.IsSwapping)
+            if (!gemPlayBehavior.IsSwappingBack)
             {
                 continue;
             }
 
-            var targetGameBoardField = _playContext
+            var originalGameBoardField = _playContext
                .GameBoardFields
                .GetField(
-                   gemPlayBehavior.TargetRowIndex,
-                   gemPlayBehavior.TargetColumnIndex);
+                   gemPlayBehavior.OriginalRowIndex,
+                   gemPlayBehavior.OriginalColumnIndex);
 
-            if (!SwapGemToTargetGameBoardField(
+            if (!ProcessSwapBack(
                 gemEntity,
-                targetGameBoardField,
+                originalGameBoardField,
                 deltaTime))
             {
-                allGemsSwapped = false;
+                allGemsSwappedBack = false;
 
                 continue;
             }
 
-            FinishGemSwapping(
+            FinishSwapBack(
                 gemEntity,
-                targetGameBoardField);
+                originalGameBoardField);
         }
 
-        if (allGemsSwapped)
+        if (allGemsSwappedBack)
         {
-            _playContext.SetPlayState(PlayState.MatchingGems);
+            _playContext.SetPlayState(PlayState.WaitingForInput);
         }
     }
 
     private bool IsUpdateEnabled() =>
-       _playContext.PlayState == PlayState.SwappingGems;
+       _playContext.PlayState == PlayState.SwappingGemsBack;
 
-    private bool SwapGemToTargetGameBoardField(
-        Entity gemEntity,
-        GameBoardField targetGameBoardField,
-        float deltaTime)
+    private bool ProcessSwapBack(
+      Entity gemEntity,
+      GameBoardField originalGameBoardField,
+      float deltaTime)
     {
-        var targetGameBoardFieldPosition = _playContext.GetGameBoardFieldPosition(
-           targetGameBoardField);
+        var originalGameBoardFieldPosition = _playContext.GetGameBoardFieldPosition(
+           originalGameBoardField);
 
         var gemRectTransform = _rectTransformStore.Get(gemEntity);
 
         var newGemPosition = gemRectTransform
             .Position
             .MoveTowards(
-                targetGameBoardFieldPosition,
-                Constants.GemFallSpeed * deltaTime);
+                originalGameBoardFieldPosition,
+                Constants.GemSwapSpeed * deltaTime);
 
         _rectTransformStore.Set(
             gemEntity,
             gemRectTransform.UpdatePosition(newGemPosition));
 
-        return newGemPosition == targetGameBoardFieldPosition;
+        return newGemPosition == originalGameBoardFieldPosition;
     }
 
-    private void FinishGemSwapping(
+    private void FinishSwapBack(
         Entity gemEntity,
-        GameBoardField targetGameBoardField)
+        GameBoardField originalGameBoardField)
     {
-        targetGameBoardField.AttachGem(gemEntity);
+        originalGameBoardField.AttachGem(gemEntity);
 
         var gemPlayBehavior = _gemPlayBehaviorStore.Get(gemEntity);
 
         _gemPlayBehaviorStore.Set(
             gemEntity,
-            gemPlayBehavior.FinishSwapping());
+            gemPlayBehavior.FinishSwappingBack());
     }
+
 }

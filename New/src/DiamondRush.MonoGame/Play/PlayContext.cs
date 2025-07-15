@@ -16,6 +16,8 @@ internal sealed class PlayContext
 
     public PlayState PlayState { get; private set; }
 
+    public PlayState PreviousPlayState { get; private set; }
+
     private Dictionary<GameBoardField, Vector2> _gameBoardFieldPositions;
 
     private readonly Dictionary<int, List<Entity>> _spawnedGemEntitiesByColumnIndex;
@@ -41,19 +43,8 @@ internal sealed class PlayContext
     public void SetPlayState(
         PlayState playState)
     {
+        PreviousPlayState = PlayState;
         PlayState = playState;
-    }
-
-    public static PlayContext CreateDefault(
-        Entity gameBoardEntity,
-        GameBoard gameBoard)
-    {
-        var gameBoardFields = new GameBoardFields(gameBoard);
-
-        return new PlayContext(
-            gameBoardEntity,
-            gameBoard,
-            gameBoardFields);
     }
 
     public void ComputeGameBoardFieldPositions(
@@ -127,5 +118,17 @@ internal sealed class PlayContext
     public void ClearSpawnedGemEntities()
     {
         _spawnedGemEntitiesByColumnIndex.Clear();
+    }
+
+    public static PlayContext CreateDefault(
+       Entity gameBoardEntity,
+       GameBoard gameBoard)
+    {
+        var gameBoardFields = new GameBoardFields(gameBoard);
+
+        return new PlayContext(
+            gameBoardEntity,
+            gameBoard,
+            gameBoardFields);
     }
 }

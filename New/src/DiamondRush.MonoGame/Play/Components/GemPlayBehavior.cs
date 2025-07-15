@@ -2,13 +2,17 @@
 
 internal sealed record GemPlayBehavior
 {
+    public int CurrentRowIndex { get; private set; } = -1;
+
+    public int CurrentColumnIndex { get; private set; } = -1;
+
+    public int OriginalRowIndex { get; private set; } = -1;
+
+    public int OriginalColumnIndex { get; private set; } = -1;
+
     public int TargetRowIndex { get; private set; } = -1;
 
     public int TargetColumnIndex { get; private set; } = -1;
-
-    public int AttachedToRowIndex { get; private set; } = -1;
-
-    public int AttachedColumnIndex { get; private set; } = -1;
 
     public bool IsFalling { get; private set; } = false;
 
@@ -25,6 +29,10 @@ internal sealed record GemPlayBehavior
     public float CollectAnimationProgress { get; init; } = 0f;
 
     public bool IsSwapping { get; private set; } = false;
+
+    public bool IsSwapped { get; private set; } = false;
+
+    public bool IsSwappingBack { get; private set; } = false;
 
     public GemPlayBehavior StartFalling(
         int targetRowIndex,
@@ -43,8 +51,10 @@ internal sealed record GemPlayBehavior
         return this with
         {
             IsFalling = false,
-            AttachedToRowIndex = TargetRowIndex,
-            AttachedColumnIndex = TargetColumnIndex,
+            OriginalRowIndex = TargetRowIndex,
+            OriginalColumnIndex = TargetColumnIndex,
+            CurrentRowIndex = TargetRowIndex,
+            CurrentColumnIndex = TargetColumnIndex,
             TargetRowIndex = -1,
             TargetColumnIndex = -1,
         };
@@ -83,8 +93,8 @@ internal sealed record GemPlayBehavior
             IsCollecting = false,
             IsCollected = true,
             CollectAnimationEnabled = false,
-            AttachedToRowIndex = -1,
-            AttachedColumnIndex = -1,
+            CurrentRowIndex = -1,
+            CurrentColumnIndex = -1,
         };
     }
 
@@ -117,10 +127,41 @@ internal sealed record GemPlayBehavior
         return this with
         {
             IsSwapping = false,
-            AttachedToRowIndex = TargetRowIndex,
-            AttachedColumnIndex = TargetColumnIndex,
+            IsSwapped = true,
+            CurrentRowIndex = TargetRowIndex,
+            CurrentColumnIndex = TargetColumnIndex,
             TargetRowIndex = -1,
             TargetColumnIndex = -1,
+        };
+    }
+
+    public GemPlayBehavior ConfirmSwappedPosition()
+    {
+        return this with
+        {
+            IsSwapping = false,
+            IsSwapped = false,
+            OriginalRowIndex = CurrentRowIndex,
+            OriginalColumnIndex = CurrentColumnIndex,
+        };
+    }
+
+    public GemPlayBehavior StartSwappingBack()
+    {
+        return this with
+        {
+            IsSwappingBack = true,
+        };
+    }
+
+    public GemPlayBehavior FinishSwappingBack()
+    {
+        return this with
+        {
+            IsSwappingBack = false,
+            IsSwapped = false,
+            CurrentRowIndex = OriginalRowIndex,
+            CurrentColumnIndex = OriginalColumnIndex,
         };
     }
 }
