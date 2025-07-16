@@ -4,15 +4,17 @@ internal enum PlayState
 {
     WaitingForInput,
 
-    SwappingGems,
+    GemSwap,
 
-    SwappingGemsBack,
+    GemSwapBack,
 
-    MatchingGems,
+    GemMatch,
 
-    CollectingGems,
+    GemCollect,
 
-    SpawningNewGems,
+    GemSpawn,
 
-    FallingGems,
+    GemFallInitiation,
+
+    GemFallMovement,
 }

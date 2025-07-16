@@ -110,7 +110,7 @@ internal sealed class GemDragSystem
             _messenger.SendMessage(
                 new GemSwappingStartedMessage());
 
-            _playContext.SetPlayState(PlayState.SwappingGems);
+            _playContext.SetPlayState(PlayState.GemSwap);
         }
     }
 
