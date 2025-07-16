@@ -71,7 +71,7 @@ internal sealed class PlayWorld
 
         playContext.ComputeGameBoardFieldPositions(gameBoardRectTransform);
 
-        playContext.SetPlayState(PlayState.SpawningNewGems);
+        playContext.SetPlayState(PlayState.GemSpawn);
 
         var gemEntityView = _entityContext
             .UseQuery()
@@ -92,7 +92,12 @@ internal sealed class PlayWorld
                 playContext));
 
         _systemManager.AddSystem(
-            new GemFallSystem(
+            new GemFallInitiationSystem(
+                _entityContext,
+                playContext));
+
+        _systemManager.AddSystem(
+            new GemFallMovementSystem(
                 _entityContext,
                 playContext,
                 gemEntityView));

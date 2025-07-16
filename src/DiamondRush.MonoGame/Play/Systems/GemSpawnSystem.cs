@@ -48,7 +48,7 @@ internal sealed class GemSpawnSystem :
 
         if (TrySpawnNewGems())
         {
-            _playContext.SetPlayState(PlayState.FallingGems);
+            _playContext.SetPlayState(PlayState.GemFallInitiation);
         }
         else
         {
@@ -57,7 +57,7 @@ internal sealed class GemSpawnSystem :
     }
 
     private bool IsUpdateEnabled() =>
-        _playContext.PlayState == PlayState.SpawningNewGems;
+        _playContext.PlayState == PlayState.GemSpawn;
 
     private bool TrySpawnNewGems()
     {

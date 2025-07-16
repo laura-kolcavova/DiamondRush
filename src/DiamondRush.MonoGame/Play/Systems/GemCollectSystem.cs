@@ -62,7 +62,7 @@ internal sealed class GemCollectSystem :
         {
             if (FinishCollectingGems())
             {
-                _playContext.SetPlayState(PlayState.SpawningNewGems);
+                _playContext.SetPlayState(PlayState.GemSpawn);
 
                 _startCollectMatchingGemsFinished = false;
             }
@@ -70,7 +70,7 @@ internal sealed class GemCollectSystem :
     }
 
     private bool IsUpdateEnabled() =>
-        _playContext.PlayState == PlayState.CollectingGems;
+        _playContext.PlayState == PlayState.GemCollect;
 
     private bool StartCollectingMatchingGems()
     {

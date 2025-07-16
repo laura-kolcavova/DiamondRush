@@ -53,9 +53,9 @@ internal sealed class GemMatchSystem :
                 }
             }
 
-            _playContext.SetPlayState(PlayState.CollectingGems);
+            _playContext.SetPlayState(PlayState.GemCollect);
         }
-        else if (_playContext.PreviousPlayState == PlayState.SwappingGems)
+        else if (_playContext.PreviousPlayState == PlayState.GemSwap)
         {
             foreach (var gemEntity in _gemEntityView.AsEnumerable())
             {
@@ -77,7 +77,7 @@ internal sealed class GemMatchSystem :
                 }
             }
 
-            _playContext.SetPlayState(PlayState.SwappingGemsBack);
+            _playContext.SetPlayState(PlayState.GemSwapBack);
         }
         else
         {
@@ -86,7 +86,7 @@ internal sealed class GemMatchSystem :
     }
 
     private bool IsUpdateEnabled() =>
-      _playContext.PlayState == PlayState.MatchingGems;
+      _playContext.PlayState == PlayState.GemMatch;
 
     private bool TrySearchForMatchingGems()
     {

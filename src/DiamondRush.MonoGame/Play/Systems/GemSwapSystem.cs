@@ -76,12 +76,12 @@ internal sealed class GemSwapSystem :
 
         if (allGemsSwapped)
         {
-            _playContext.SetPlayState(PlayState.MatchingGems);
+            _playContext.SetPlayState(PlayState.GemMatch);
         }
     }
 
     private bool IsUpdateEnabled() =>
-       _playContext.PlayState == PlayState.SwappingGems;
+       _playContext.PlayState == PlayState.GemSwap;
 
     private bool SwapGemToTargetGameBoardField(
         Entity gemEntity,

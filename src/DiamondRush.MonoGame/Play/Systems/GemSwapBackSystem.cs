@@ -82,7 +82,7 @@ internal sealed class GemSwapBackSystem
     }
 
     private bool IsUpdateEnabled() =>
-       _playContext.PlayState == PlayState.SwappingGemsBack;
+       _playContext.PlayState == PlayState.GemSwapBack;
 
     private bool ProcessSwapBack(
       Entity gemEntity,
