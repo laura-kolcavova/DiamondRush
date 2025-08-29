@@ -1,4 +1,5 @@
-﻿using DiamondRush.MonoGame.Core.GameOptions;
+﻿using DiamondRush.MonoGame.Core;
+using DiamondRush.MonoGame.Core.GameOptions;
 using DiamondRush.MonoGame.Core.Scenes;
 using DiamondRush.MonoGame.Play;
 using DiamondRush.MonoGame.Shared.Assets;
@@ -8,7 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DiamondRush.MonoGame;
 
-internal sealed class DiamondRushGame : Game
+internal sealed class DiamondRushGame :
+    Game,
+    IGameStateProvider
 {
     public const string Title = "Diamond Rush";
 
@@ -45,18 +48,19 @@ internal sealed class DiamondRushGame : Game
         IsMouseVisible = true;
     }
 
+    IServiceProvider IGameStateProvider.Services => Services;
+
     protected override void Initialize()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         Services.AddService(_spriteBatch);
         Services.AddService(_graphics);
-        Services.AddService(GraphicsDevice);
         Services.AddService(_sceneManager);
 
         base.Initialize();
 
-        var playScene = new PlayScene(Services);
+        var playScene = new PlayScene(this);
 
         playScene.Load();
 
