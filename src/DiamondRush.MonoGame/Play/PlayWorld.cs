@@ -13,6 +13,8 @@ namespace DiamondRush.MonoGame.Play;
 
 internal sealed class PlayWorld
 {
+    private readonly IGameStateProvider _gameStateProvider;
+
     private readonly GraphicsDevice _graphicsDevice;
 
     private readonly SpriteBatch _spriteBatch;
@@ -26,12 +28,14 @@ internal sealed class PlayWorld
     private readonly SystemManager _systemManager;
 
     public PlayWorld(
-        GraphicsDevice graphicsDevice,
+        IGameStateProvider gameStateProvider,
         SpriteBatch spriteBatch,
         IMessenger messenger,
         IPlaySceneContentProvider playSceneContentProvider)
     {
-        _graphicsDevice = graphicsDevice;
+        _gameStateProvider = gameStateProvider;
+
+        _graphicsDevice = _gameStateProvider.GraphicsDevice;
 
         _spriteBatch = spriteBatch;
 
@@ -82,6 +86,7 @@ internal sealed class PlayWorld
 
         _systemManager.AddSystem(
            new PlayerInputSystem(
+               _gameStateProvider,
                _messenger,
                playContext));
 

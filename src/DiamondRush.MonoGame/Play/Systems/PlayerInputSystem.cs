@@ -1,4 +1,5 @@
-﻿using DiamondRush.MonoGame.Core.Messages.Abstractions;
+﻿using DiamondRush.MonoGame.Core;
+using DiamondRush.MonoGame.Core.Messages.Abstractions;
 using DiamondRush.MonoGame.Core.Systems.Abstractions;
 using DiamondRush.MonoGame.Play.Messages;
 using Microsoft.Xna.Framework;
@@ -9,16 +10,19 @@ namespace DiamondRush.MonoGame.Play.Systems;
 internal sealed class PlayerInputSystem :
     IUpdateSystem
 {
+    private readonly IGameStateProvider _gameStateProvider;
+
     private readonly IMessenger _messenger;
 
     private readonly PlayContext _playContext;
 
     public PlayerInputSystem(
+        IGameStateProvider gameStateProvider,
         IMessenger messenger,
         PlayContext playContext)
     {
+        _gameStateProvider = gameStateProvider;
         _messenger = messenger;
-
         _playContext = playContext;
     }
 
@@ -39,6 +43,11 @@ internal sealed class PlayerInputSystem :
                 _pressEnabled = false;
             }
 
+            return;
+        }
+
+        if (!_gameStateProvider.IsActive)
+        {
             return;
         }
 

@@ -1,4 +1,5 @@
-﻿using DiamondRush.MonoGame.Core.Messages;
+﻿using DiamondRush.MonoGame.Core;
+using DiamondRush.MonoGame.Core.Messages;
 using DiamondRush.MonoGame.Core.Scenes;
 using DiamondRush.MonoGame.Core.Services;
 using DiamondRush.MonoGame.Play.Content;
@@ -11,6 +12,8 @@ namespace DiamondRush.MonoGame.Play;
 
 internal sealed class PlayScene : Scene
 {
+    private readonly IGameStateProvider _gameStateProvider;
+
     private readonly GraphicsDevice _graphicsDevice;
 
     private readonly SpriteBatch _spriteBatch;
@@ -24,15 +27,17 @@ internal sealed class PlayScene : Scene
     private readonly PlayWorld _playWorld;
 
     public PlayScene(
-        IServiceProvider serviceProvider)
+        IGameStateProvider gameStateProvider)
         : base(nameof(PlayScene))
     {
-        _graphicsDevice = serviceProvider.GetRequiredService<GraphicsDevice>();
+        _gameStateProvider = gameStateProvider;
 
-        _spriteBatch = serviceProvider.GetRequiredService<SpriteBatch>();
+        _graphicsDevice = _gameStateProvider.GraphicsDevice;
+
+        _spriteBatch = _gameStateProvider.Services.GetRequiredService<SpriteBatch>();
 
         _contentManager = new ContentManager(
-            serviceProvider,
+            _gameStateProvider.Services,
             AssetNames.RootDirectory);
 
         _playSceneContent = new PlaySceneContent(
@@ -42,7 +47,7 @@ internal sealed class PlayScene : Scene
         _messenger = new Messenger();
 
         _playWorld = new PlayWorld(
-            _graphicsDevice,
+            _gameStateProvider,
             _spriteBatch,
             _messenger,
             _playSceneContent);
